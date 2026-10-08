@@ -1,9 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  cacheComponents: true,
-  partialPrefetching: true,
+  // Static HTML export into `out/`, served by Cloudflare Pages.
+  output: "export",
+  // There's no image optimization server on Pages; the source images are
+  // already sized WebP files.
+  images: { unoptimized: true },
   turbopack: {
     rules: {
       "*.css": {
@@ -15,5 +17,3 @@ const nextConfig: NextConfig = {
 };
 
 export default nextConfig;
-
-import("@opennextjs/cloudflare").then((m) => m.initOpenNextCloudflareForDev());

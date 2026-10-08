@@ -29,19 +29,10 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Cloudflare
+## Deploy on Cloudflare Pages
 
-The site runs on Cloudflare Workers via [OpenNext for Cloudflare](https://opennext.js.org/cloudflare) (`@opennextjs/cloudflare`). Config lives in `wrangler.jsonc` and `open-next.config.ts`.
+The site is a static export (`output: "export"` in `next.config.ts`): `next build` writes plain HTML/CSS/JS to `out/`, which the Cloudflare Pages project `handayani` serves at https://gordensemarang.custompedia.id.
 
-```bash
-pnpm preview   # build + run the production Worker locally (http://localhost:8787)
-pnpm deploy    # build + deploy to Cloudflare (run `pnpm wrangler login` first)
-```
+Pages build settings: build command `npx next build`, output directory `out`. Every push to `main` deploys automatically.
 
-For Git-based deploys (Workers Builds), set the build command to `pnpm opennextjs-cloudflare build` and the deploy command to `pnpm opennextjs-cloudflare deploy`.
-
-Notes:
-
-- The page is fully prerendered, so the incremental cache is served from Workers static assets (no R2 bucket needed). If you add ISR/revalidation later, switch to the R2 cache — see the [caching docs](https://opennext.js.org/cloudflare/caching).
-- `patches/@opennextjs__cloudflare@1.20.9.patch` makes OpenNext inline `.next/server/preview-props.json`, which Next.js 16.4 loads at runtime. Drop the patch once upstream handles it.
-- Run `pnpm cf-typegen` after changing bindings in `wrangler.jsonc`.
+Because there is no server, features that need one (image optimization, Cache Components/PPR, ISR, Server Actions, route handlers that read the request) are not available. Images are served as-is, so keep them pre-sized WebP. `public/_headers` sets the cache headers Pages applies.

@@ -162,8 +162,7 @@ export function Footer() {
   );
 }
 
-async function CopyrightYear() {
-  "use cache";
+function CopyrightYear() {
   return new Date().getFullYear();
 }
 
