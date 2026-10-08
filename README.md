@@ -29,8 +29,19 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+## Deploy on Cloudflare
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The site runs on Cloudflare Workers via [OpenNext for Cloudflare](https://opennext.js.org/cloudflare) (`@opennextjs/cloudflare`). Config lives in `wrangler.jsonc` and `open-next.config.ts`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+pnpm preview   # build + run the production Worker locally (http://localhost:8787)
+pnpm deploy    # build + deploy to Cloudflare (run `pnpm wrangler login` first)
+```
+
+For Git-based deploys (Workers Builds), set the build command to `pnpm opennextjs-cloudflare build` and the deploy command to `pnpm opennextjs-cloudflare deploy`.
+
+Notes:
+
+- The page is fully prerendered, so the incremental cache is served from Workers static assets (no R2 bucket needed). If you add ISR/revalidation later, switch to the R2 cache — see the [caching docs](https://opennext.js.org/cloudflare/caching).
+- `patches/@opennextjs__cloudflare@1.20.9.patch` makes OpenNext inline `.next/server/preview-props.json`, which Next.js 16.4 loads at runtime. Drop the patch once upstream handles it.
+- Run `pnpm cf-typegen` after changing bindings in `wrangler.jsonc`.
