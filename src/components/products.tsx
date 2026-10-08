@@ -8,7 +8,7 @@ export function Products() {
     <section id="produk" className="container-page py-20 md:py-28">
       <SectionHeading
         eyebrow="Produk Kami"
-        title="Temukan gorden yang tepat untuk rumah kakak"
+        title="Temukan gorden yang tepat untuk rumah Anda"
         description="Dua pilihan utama yang bisa dipasang sendiri-sendiri atau dipadukan dalam satu jendela."
       />
 

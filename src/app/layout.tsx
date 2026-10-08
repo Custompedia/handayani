@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Gilda_Display, Nunito_Sans } from "next/font/google";
+import { MetaPixel } from "@/components/meta-pixel";
 import { contact } from "@/lib/data";
 import "./globals.css";
 
@@ -18,7 +19,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://gordensemarang.custompedia.id"),
   title: "Handayani Gorden Semarang — Gorden Blackout & Vitrase Custom",
   description:
-    "5 tahun bantu 2000+ keluarga sejukkan rumahnya. Gorden blackout mulai Rp170.000/meter lari, vitrase mulai Rp100.000/meter lari. Gratis survei area Kota Semarang.",
+    "6+ tahun bantu 3.000+ keluarga sejukkan rumahnya. Gorden blackout mulai Rp170.000/meter lari, vitrase mulai Rp100.000/meter lari. Gratis survei area Kota Semarang.",
   keywords: [
     "gorden semarang",
     "gorden blackout semarang",
@@ -64,6 +65,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         {children}
+        <MetaPixel />
       </body>
     </html>
   );

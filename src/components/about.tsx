@@ -2,8 +2,8 @@ import Image from "next/image";
 import { Reveal } from "./reveal";
 
 const stats = [
-  { value: "5+", label: "Tahun pengalaman" },
-  { value: "2000+", label: "Keluarga terlayani" },
+  { value: "6+", label: "Tahun pengalaman" },
+  { value: "3.000+", label: "Keluarga terlayani" },
   { value: "24", label: "Pilihan koleksi & motif kain" },
 ];
 

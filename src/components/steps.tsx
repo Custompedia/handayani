@@ -8,7 +8,7 @@ export function Steps() {
       <SectionHeading
         eyebrow="Cara Pesan"
         title="Pesan gorden semudah ini"
-        description="Kakak cukup pilih, sisanya kami yang urus dari ukur sampai pasang."
+        description="Anda cukup pilih, sisanya kami yang urus dari ukur sampai pasang."
       />
 
       <ol className="bg-linen mt-12 grid gap-px overflow-hidden rounded-3xl md:mt-16 md:grid-cols-2 lg:grid-cols-3">

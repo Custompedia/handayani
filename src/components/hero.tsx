@@ -7,8 +7,8 @@ import { Reveal } from "./reveal";
 const highlights = [
   {
     icon: BadgeCheck,
-    title: "2000+ keluarga",
-    body: "5 tahun bantu keluarga sejukkan rumahnya.",
+    title: "3.000+ keluarga",
+    body: "6+ tahun bantu keluarga sejukkan rumahnya.",
   },
   {
     icon: Ruler,
@@ -40,7 +40,7 @@ export function Hero() {
           className="object-cover object-[50%_40%]"
         />
         <div className="from-ink/75 via-ink/35 absolute inset-0 bg-gradient-to-r to-transparent" />
-        <div className="from-ink/50 absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t to-transparent" />
+        <div className="from-ink/85 via-ink/40 md:from-ink/50 absolute inset-x-0 bottom-0 h-3/4 bg-gradient-to-t to-transparent md:h-40 md:via-transparent" />
 
         <div className="container-page relative flex h-full flex-col justify-end pb-16 md:justify-center md:pb-0">
           <Reveal className="text-cream max-w-xl">
@@ -51,7 +51,7 @@ export function Hero() {
               Gorden yang bikin rumah terasa lebih tenang
             </h1>
             <p className="text-cream/85 mt-5 text-base leading-relaxed md:text-lg">
-              Dibuat sesuai ukuran jendela kakak. Blackout mulai{" "}
+              Dibuat sesuai ukuran jendela Anda. Blackout mulai{" "}
               <strong className="text-cream">Rp170.000/mL</strong>, vitrase
               mulai <strong className="text-cream">Rp100.000/mL</strong>.
             </p>
@@ -80,7 +80,10 @@ export function Hero() {
       <div className="container-page relative z-10 -mt-10 md:-mt-14">
         <ul className="bg-linen grid grid-cols-2 gap-px overflow-hidden rounded-2xl shadow-[0_20px_50px_-20px_rgba(42,34,29,0.25)] lg:grid-cols-4">
           {highlights.map(({ icon: Icon, title, body }) => (
-            <li key={title} className="flex gap-4 bg-white p-5 md:p-7">
+            <li
+              key={title}
+              className="flex flex-col gap-3 bg-white p-4 sm:flex-row sm:gap-4 sm:p-5 md:p-7"
+            >
               <Icon
                 className="text-gold-deep size-6 shrink-0"
                 strokeWidth={1.5}

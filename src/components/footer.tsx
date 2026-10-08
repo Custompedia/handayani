@@ -23,10 +23,6 @@ export function QuoteCta() {
           <h2 className="mt-4 font-serif text-3xl leading-tight md:text-5xl">
             Kirim foto atau ukuran jendela, kami hitungkan penawarannya
           </h2>
-          <p className="text-cream/80 mt-5 md:text-lg">
-            Nanti kami bantu buatkan penawaran harga, sehingga kakak bisa tahu
-            estimasi kebutuhan kakak.
-          </p>
           <a
             href={waLink(
               "Halo Handayani Gorden, saya mau minta penawaran harga. Berikut foto/ukuran jendela saya:",

@@ -294,19 +294,19 @@ export const portfolio: PortfolioItem[] = [
 export const steps = [
   {
     title: "Konsultasi",
-    body: "Hubungi kami lewat WhatsApp atau datang ke alamat kami. Sampaikan model dan warna gorden yang kakak inginkan.",
+    body: "Hubungi kami lewat WhatsApp atau datang ke alamat kami. Sampaikan model dan warna gorden yang Anda inginkan.",
   },
   {
     title: "Survei & ukur",
-    body: "Kami bantu ukur ulang dan bawakan katalog contoh kain ke rumah, jadi kakak bisa lihat langsung warna dan kualitas kainnya. Gratis untuk area Kota Semarang.",
+    body: "Kami bantu ukur ulang dan bawakan katalog contoh kain ke rumah, jadi Anda bisa lihat langsung warna dan kualitas kainnya. Gratis untuk area Kota Semarang.",
   },
   {
     title: "Penawaran harga",
-    body: "Kami bantu hitungkan total kebutuhan gorden yang kakak inginkan.",
+    body: "Kami bantu hitungkan total kebutuhan gorden yang Anda inginkan.",
   },
   {
     title: "DP minimal 30%",
-    body: "Kalau cocok, kakak bisa DP dulu minimal 30% dari total. Pembayaran bisa cash ataupun transfer.",
+    body: "Kalau cocok, Anda bisa DP dulu minimal 30% dari total. Pembayaran bisa cash ataupun transfer.",
   },
   {
     title: "Pengerjaan ±7 hari",
