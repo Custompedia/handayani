@@ -15,6 +15,7 @@
 }
 
 html {
+  color-scheme: only light;
   scroll-behavior: smooth;
   scroll-padding-top: 6rem;
 }

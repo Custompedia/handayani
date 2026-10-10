@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Gilda_Display, Nunito_Sans } from "next/font/google";
 import { MetaPixel } from "@/components/meta-pixel";
 import { contact } from "@/lib/data";
@@ -34,6 +34,11 @@ export const metadata: Metadata = {
     locale: "id_ID",
     type: "website",
   },
+};
+
+export const viewport: Viewport = {
+  colorScheme: "only light",
+  themeColor: "#faf7f2",
 };
 
 const jsonLd = {
