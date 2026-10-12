@@ -25,6 +25,34 @@ body {
   color: var(--color-ink);
 }
 
+/* Scrollbar halaman mengikuti palet web: track krem, thumb cokelat muda
+   yang membulat dan berubah emas saat disentuh. */
+html::-webkit-scrollbar {
+  width: 12px;
+}
+
+html::-webkit-scrollbar-track {
+  background: var(--color-sand);
+}
+
+html::-webkit-scrollbar-thumb {
+  background: #cdbfae;
+  border: 3px solid var(--color-sand);
+  border-radius: 999px;
+}
+
+html::-webkit-scrollbar-thumb:hover {
+  background: var(--color-gold-deep);
+}
+
+/* Firefox tidak mengenal ::-webkit-scrollbar. */
+@supports not selector(::-webkit-scrollbar) {
+  html {
+    scrollbar-color: #cdbfae var(--color-sand);
+    scrollbar-width: thin;
+  }
+}
+
 @utility container-page {
   margin-inline: auto;
   width: 100%;

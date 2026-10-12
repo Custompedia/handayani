@@ -1,7 +1,9 @@
 import Image from "next/image";
 import { ArrowRight, Clock, MapPin, Phone } from "lucide-react";
-import { contact, instagramUrl, navLinks, waLink } from "@/lib/data";
+import { contact, instagramUrl, navLinks } from "@/lib/data";
 import { InstagramIcon, WhatsAppIcon } from "./icons";
+import { intents } from "@/lib/wa-intents";
+import { WaButton } from "./wa-form";
 
 export function Footer() {
   return (
@@ -16,14 +18,14 @@ export function Footer() {
             className="h-24 w-auto"
           />
           <p className="text-cream/70 mt-6 max-w-xs text-sm leading-relaxed">
-            Gorden blackout &amp; vitrase custom untuk rumah, klinik, hingga
-            villa di Semarang dan sekitarnya.
+            Bantu wujudkan ruang yang lebih estetik lewat pilihan gorden custom,
+            konsultasi, dan layanan ke rumah.
           </p>
         </div>
 
         <div>
           <h3 className="text-gold text-xs font-bold tracking-[0.25em] uppercase">
-            Menu
+            Jelajahi
           </h3>
           <ul className="mt-5 space-y-3 text-sm">
             {navLinks.map((l) => (
@@ -38,19 +40,17 @@ export function Footer() {
 
         <div>
           <h3 className="text-gold text-xs font-bold tracking-[0.25em] uppercase">
-            Kontak
+            Hubungi
           </h3>
           <ul className="mt-5 space-y-4 text-sm">
             <li>
-              <a
-                href={waLink()}
-                target="_blank"
-                rel="noopener noreferrer"
+              <WaButton
+                intent={intents.konsultasi}
                 className="text-cream/80 hover:text-gold flex gap-3"
               >
                 <Phone className="size-4 shrink-0 translate-y-0.5" />
                 {contact.phone} (WhatsApp)
-              </a>
+              </WaButton>
             </li>
             <li>
               <a
@@ -127,14 +127,12 @@ function CopyrightYear() {
 
 export function WhatsAppFloat() {
   return (
-    <a
-      href={waLink()}
-      target="_blank"
-      rel="noopener noreferrer"
+    <WaButton
+      intent={intents.konsultasi}
       aria-label="Chat WhatsApp"
       className="shadow-ink/20 fixed right-5 bottom-5 z-30 grid size-14 place-items-center rounded-full bg-[#25D366] text-white shadow-lg transition-transform hover:scale-110 md:right-8 md:bottom-8"
     >
       <WhatsAppIcon className="size-7" />
-    </a>
+    </WaButton>
   );
 }

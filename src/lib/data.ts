@@ -17,31 +17,57 @@ export function waLink(
 export const instagramUrl = `https://instagram.com/${contact.instagram}`;
 
 export const navLinks = [
-  { href: "#produk", label: "Produk" },
-  { href: "#koleksi", label: "Koleksi Kain" },
   { href: "#portofolio", label: "Portofolio" },
+  { href: "#keunggulan", label: "Kenapa Handayani" },
   { href: "#cara-pesan", label: "Cara Pesan" },
+  { href: "#koleksi", label: "Koleksi" },
   { href: "#testimoni", label: "Testimoni" },
 ];
 
-export const products = [
+// Kartu di section Koleksi (copy mengikuti dummy v3, foto milik Handayani).
+export const collections = [
   {
-    name: "Gorden Blackout",
-    price: "Rp 170.000",
+    type: "Kontrol cahaya",
+    name: "Blackout 80%",
     description:
-      "Tersedia blackout 80% dan 100%. Bisa dipasang dengan box gorden, poni, atau hidden ceiling.",
-    image: "/images/produk-blackout-hd.webp",
-    collections: "16 koleksi kain",
-    href: "#koleksi",
+      "Seimbangkan kebutuhan privasi, kenyamanan, dan pencahayaan untuk berbagai ruang.",
+    image: "/images/portfolio/p07_0.webp",
+    need: "blackout" as const,
   },
   {
-    name: "Gorden Vitrase",
-    price: "Rp 100.000",
+    type: "Privasi maksimal",
+    name: "Blackout 100%",
     description:
-      "Kain tipis yang tetap meneruskan cahaya. Tersedia model ring (smokring) dan pengait kawat.",
+      "Pilihan untuk ruang yang membutuhkan penghalang cahaya lebih tinggi, seperti kamar tidur.",
+    image: "/images/portfolio/p10_3.webp",
+    need: "blackout" as const,
+  },
+  {
+    type: "Cahaya lebih lembut",
+    name: "Vitrase",
+    description:
+      "Sentuhan ringan yang membantu membuat cahaya masuk lebih lembut dan ruangan tampak anggun.",
     image: "/images/produk-vitrase-hd.webp",
-    collections: "8 motif kain",
-    href: "#koleksi",
+    need: "vitrase" as const,
+  },
+];
+
+// Proyek dengan nama lokasi yang memang ada di katalog Handayani.
+export const featuredProjects = [
+  {
+    name: "Kedaton Homes",
+    detail: "BSB City · perumahan komersial",
+    image: "/images/portfolio/p10_0.webp",
+  },
+  {
+    name: "De Villa Townhouse",
+    detail: "Kedungmundu · blackout 100% dengan box gorden",
+    image: "/images/portfolio/p11_2.webp",
+  },
+  {
+    name: "Villa Susan SPA & Resort",
+    detail: "Bandungan, Ambarawa",
+    image: "/images/portfolio/p10_1.webp",
   },
 ];
 
@@ -178,7 +204,7 @@ export const vitraseFabrics = [
 ];
 
 export const portfolioCategories = [
-  { id: "semua", label: "Semua" },
+  { id: "semua", label: "Semua Inspirasi" },
   { id: "ruang-tamu", label: "Ruang Tamu" },
   { id: "kamar-tidur", label: "Kamar Tidur" },
   { id: "custom", label: "Box, Poni & Hidden Ceiling" },
@@ -293,28 +319,16 @@ export const portfolio: PortfolioItem[] = [
 
 export const steps = [
   {
-    title: "Konsultasi",
-    body: "Chat WhatsApp atau datang ke toko, ceritakan model & warna yang diinginkan.",
+    title: "Ceritakan kebutuhan Anda",
+    body: "Konsultasikan area, gaya interior, warna favorit, dan kisaran kebutuhan melalui WhatsApp.",
   },
   {
-    title: "Survei & ukur",
-    body: "Kami ukur dan bawakan katalog kain ke rumah. Gratis area Kota Semarang.",
+    title: "Kami datang untuk survei",
+    body: "Tim membantu ukur dan membawa sampel katalog kain. Gratis untuk area Kota Semarang.",
   },
   {
-    title: "Penawaran harga",
-    body: "Kami hitungkan total kebutuhan gorden Anda.",
-  },
-  {
-    title: "DP minimal 30%",
-    body: "Kalau cocok, DP dulu. Bisa cash atau transfer.",
-  },
-  {
-    title: "Pengerjaan ±7 hari",
-    body: "Gorden dikerjakan kurang lebih 7 hari.",
-  },
-  {
-    title: "Pasang, baru lunas",
-    body: "Pelunasan setelah gorden selesai dipasang.",
+    title: "Pilih, produksi, lalu pasang",
+    body: "Setelah kain dan estimasi disepakati, pengerjaan serta pemasangan dikoordinasikan tim.",
   },
 ];
 

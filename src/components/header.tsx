@@ -4,9 +4,11 @@ import Image from "next/image";
 import { Menu, X, Phone } from "lucide-react";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { contact, navLinks, waLink } from "@/lib/data";
+import { contact, navLinks } from "@/lib/data";
 import { cn } from "@/lib/utils";
 import { WhatsAppIcon } from "./icons";
+import { intents } from "@/lib/wa-intents";
+import { WaButton } from "./wa-form";
 
 export function Header() {
   const [open, setOpen] = useState(false);
@@ -49,7 +51,7 @@ export function Header() {
         )}
       >
         <nav className="container-page flex h-18 items-center justify-between gap-6 md:h-20">
-          <a href="#" aria-label="Handayani Gorden Semarang — beranda">
+          <a href="#" aria-label="Handayani Gorden Semarang - beranda">
             <Image
               src="/images/logo.png"
               alt="Handayani Gorden Semarang"
@@ -74,15 +76,13 @@ export function Header() {
           </ul>
 
           <div className="flex items-center gap-2">
-            <a
-              href={waLink()}
-              target="_blank"
-              rel="noopener noreferrer"
+            <WaButton
+              intent={intents.konsultasi}
               className="bg-ink text-cream hover:bg-cocoa hidden items-center gap-2 rounded-full px-5 py-2.5 text-sm font-bold transition-colors sm:inline-flex"
             >
               <WhatsAppIcon className="size-4" />
               Konsultasi Gratis
-            </a>
+            </WaButton>
             <button
               type="button"
               onClick={() => setOpen(true)}
@@ -144,15 +144,14 @@ export function Header() {
                   </li>
                 ))}
               </ul>
-              <a
-                href={waLink()}
-                target="_blank"
-                rel="noopener noreferrer"
+              <WaButton
+                intent={intents.konsultasi}
+                onClick={() => setOpen(false)}
                 className="bg-ink text-cream mt-auto inline-flex items-center justify-center gap-2 rounded-full px-5 py-4 font-bold"
               >
                 <WhatsAppIcon className="size-5" />
                 Konsultasi via WhatsApp
-              </a>
+              </WaButton>
             </motion.div>
           </motion.div>
         )}

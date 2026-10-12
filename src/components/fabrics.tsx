@@ -5,22 +5,23 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { Check, Share2 } from "lucide-react";
 import { WhatsAppIcon } from "./icons";
+import { CollectionCards } from "./collection-cards";
 import { Reveal, SectionHeading } from "./reveal";
 import {
   blackoutCollections,
   swatchSrc,
   vitraseFabrics,
-  waLink,
   type FabricCollection,
 } from "@/lib/data";
 import { cn } from "@/lib/utils";
+import { WaButton } from "./wa-form";
 
 const tabs = [
   { id: "blackout", label: "Blackout", note: "mulai Rp170.000/mL" },
   { id: "vitrase", label: "Vitrase", note: "mulai Rp100.000/mL" },
 ] as const;
 
-// Link langsung ke satu koleksi, mis. /#kain-lino — supaya admin bisa kirim
+// Link langsung ke satu koleksi, mis. /#kain-lino - supaya admin bisa kirim
 // koleksi yang ditanyakan lewat WA tanpa harus kirim seluruh katalog.
 const HASH_PREFIX = "#kain-";
 
@@ -33,7 +34,7 @@ function collectionFromHash() {
 export function Fabrics() {
   const [tab, setTab] = useState<(typeof tabs)[number]["id"]>("blackout");
   const [collection, setCollection] = useState(0);
-  const sectionRef = useRef<HTMLElement>(null);
+  const catalogRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const openFromHash = () => {
@@ -45,7 +46,7 @@ export function Fabrics() {
       const card = document.getElementById(
         `kain-${blackoutCollections[index].slug}`,
       );
-      (card?.offsetParent ? card : sectionRef.current)?.scrollIntoView();
+      (card?.offsetParent ? card : catalogRef.current)?.scrollIntoView();
     };
     openFromHash();
     window.addEventListener("hashchange", openFromHash);
@@ -53,41 +54,58 @@ export function Fabrics() {
   }, []);
 
   return (
-    <section ref={sectionRef} id="koleksi" className="bg-sand py-20 md:py-28">
+    <section id="koleksi" className="bg-sand py-20 md:py-28">
       <div className="container-page">
         <SectionHeading
-          eyebrow="Koleksi Kain"
-          title="Pilih warna &"
-          accent="tekstur favorit"
-          description="Katalog contoh kain kami bawakan ke rumah saat survei, jadi Anda bisa lihat langsung warna dan kualitas kainnya."
+          eyebrow="Pilih suasana ruang Anda"
+          title="Koleksi kain untuk setiap"
+          accent="gaya & kebutuhan ruang."
+          description="Beragam opsi kain, model, dan warna. Tim Handayani membantu menyaring pilihan agar Anda tidak harus memutuskan semuanya sendiri."
         />
 
+        <CollectionCards />
+
         <div
-          role="tablist"
-          className="bg-cream mt-10 flex w-fit rounded-full p-1.5 shadow-sm"
+          ref={catalogRef}
+          id="katalog"
+          className="border-linen mt-16 flex flex-col gap-5 border-t pt-12 md:mt-20 md:flex-row md:items-end md:justify-between md:pt-14"
         >
-          {tabs.map((t) => (
-            <button
-              key={t.id}
-              role="tab"
-              aria-selected={tab === t.id}
-              onClick={() => setTab(t.id)}
-              className={cn(
-                "rounded-full px-5 py-2.5 text-sm transition-colors md:px-7",
-                tab === t.id ? "bg-ink text-cream" : "text-ink hover:bg-sand",
-              )}
-            >
-              <span className="font-bold">{t.label}</span>
-              <span
+          <div>
+            <h3 className="font-serif text-2xl md:text-3xl">
+              Katalog warna kain
+            </h3>
+            <p className="text-muted mt-2 max-w-md text-sm leading-relaxed md:text-base">
+              Contoh kainnya kami bawakan saat survei, jadi warna dan
+              kualitasnya bisa dilihat langsung.
+            </p>
+          </div>
+          <div
+            role="tablist"
+            className="bg-cream flex w-fit shrink-0 rounded-full p-1.5 shadow-sm"
+          >
+            {tabs.map((t) => (
+              <button
+                key={t.id}
+                role="tab"
+                aria-selected={tab === t.id}
+                onClick={() => setTab(t.id)}
                 className={cn(
-                  "ml-2 hidden text-xs sm:inline",
-                  tab === t.id ? "text-cream/70" : "text-muted",
+                  "rounded-full px-5 py-2.5 text-sm transition-colors md:px-7",
+                  tab === t.id ? "bg-ink text-cream" : "text-ink hover:bg-sand",
                 )}
               >
-                {t.note}
-              </span>
-            </button>
-          ))}
+                <span className="font-bold">{t.label}</span>
+                <span
+                  className={cn(
+                    "ml-2 hidden text-xs sm:inline",
+                    tab === t.id ? "text-cream/70" : "text-muted",
+                  )}
+                >
+                  {t.note}
+                </span>
+              </button>
+            ))}
+          </div>
         </div>
 
         {tab === "blackout" ? (
@@ -125,17 +143,17 @@ export function Fabrics() {
                     <p className="flex min-h-10 items-center font-serif text-base leading-tight md:text-lg">
                       {f.name}
                     </p>
-                    <a
-                      href={waLink(
-                        `Halo Handayani Gorden, saya tertarik dengan kain vitrase ${f.name}.`,
-                      )}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <WaButton
+                      intent={{
+                        title: `Tanya ${f.name}`,
+                        line: `Saya tertarik dengan kain vitrase ${f.name}.`,
+                        need: "vitrase",
+                      }}
                       aria-label={`Tanya kain vitrase ${f.name} via WhatsApp`}
                       className="bg-sand text-ink hover:bg-gold grid size-9 shrink-0 place-items-center rounded-full"
                     >
                       <WhatsAppIcon className="size-4" />
-                    </a>
+                    </WaButton>
                   </div>
                 </div>
               </Reveal>
@@ -177,7 +195,7 @@ function FabricStudio({
 
   async function share() {
     const url = `${window.location.origin}${window.location.pathname}${HASH_PREFIX}${collection.slug}`;
-    const title = `Kain blackout ${collection.name} — Handayani Gorden`;
+    const title = `Kain blackout ${collection.name} - Handayani Gorden`;
     if (navigator.share) {
       await navigator.share({ title, url }).catch(() => {});
       return;
@@ -313,17 +331,17 @@ function FabricStudio({
         </div>
 
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-          <a
-            href={waLink(
-              `Halo Handayani Gorden, saya tertarik dengan kain blackout ${collection.name} warna ${code}.`,
-            )}
-            target="_blank"
-            rel="noopener noreferrer"
+          <WaButton
+            intent={{
+              title: `Tanya ${collection.name} ${code}`,
+              line: `Saya tertarik dengan kain blackout ${collection.name} warna ${code}.`,
+              need: "blackout",
+            }}
             className="bg-gold text-ink hover:bg-ink hover:text-cream inline-flex flex-1 items-center justify-center gap-2 rounded-full px-6 py-3.5 font-bold transition-colors"
           >
             <WhatsAppIcon className="size-5" />
             Tanya {collection.name} {code}
-          </a>
+          </WaButton>
           <button
             type="button"
             onClick={share}
@@ -394,17 +412,17 @@ function CollectionCard({ collection }: { collection: FabricCollection }) {
             </button>
           ))}
         </div>
-        <a
-          href={waLink(
-            `Halo Handayani Gorden, saya tertarik dengan kain blackout ${collection.name} warna ${active}.`,
-          )}
-          target="_blank"
-          rel="noopener noreferrer"
+        <WaButton
+          intent={{
+            title: `Tanya ${collection.name} ${active}`,
+            line: `Saya tertarik dengan kain blackout ${collection.name} warna ${active}.`,
+            need: "blackout",
+          }}
           className="text-gold-deep hover:text-ink mt-4 inline-flex items-center gap-1.5 self-start pt-1 text-sm font-bold"
         >
           <WhatsAppIcon className="size-4" />
           Tanya warna {active}
-        </a>
+        </WaButton>
       </div>
     </div>
   );

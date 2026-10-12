@@ -96,9 +96,9 @@ export function Testimonials() {
     >
       <div className="container-page">
         <SectionHeading
-          eyebrow="Testimoni"
-          title="Kata mereka tentang"
-          accent="Handayani"
+          eyebrow="Pengalaman Pelanggan"
+          title="Bukan cuma terlihat bagus."
+          accent="Prosesnya juga nyaman."
           aside={
             <div className="flex gap-2">
               {([-1, 1] as const).map((dir) => (

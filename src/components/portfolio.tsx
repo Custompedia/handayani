@@ -3,7 +3,15 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { ArrowUpRight, ChevronLeft, ChevronRight, Plus, X } from "lucide-react";
+import {
+  ArrowRight,
+  ArrowUpRight,
+  ChevronLeft,
+  ChevronRight,
+  Plus,
+  X,
+} from "lucide-react";
+import { WhatsAppIcon } from "./icons";
 import { SectionHeading } from "./reveal";
 import {
   portfolio,
@@ -11,6 +19,8 @@ import {
   type PortfolioCategory,
 } from "@/lib/data";
 import { cn } from "@/lib/utils";
+import { intents } from "@/lib/wa-intents";
+import { WaButton } from "./wa-form";
 
 // Satu "blok" = 1 foto besar (2×2) + 8 foto kecil: pas 3 baris di grid 4 kolom
 // (desktop), 4 baris di grid 3 kolom (tablet), dan 5 baris di HP (foto besar
@@ -68,9 +78,9 @@ export function Portfolio() {
   return (
     <section id="portofolio" className="container-page py-20 md:py-28">
       <SectionHeading
-        eyebrow="Portofolio"
-        title="Hasil pemasangan"
-        accent="kami"
+        eyebrow="Inspirasi & Portofolio"
+        title="Lihat hasil akhirnya."
+        accent="Bayangkan di rumah Anda."
         description="Dari rumah tinggal, townhouse, sampai villa & klinik di Semarang dan sekitarnya."
       />
 
@@ -128,7 +138,7 @@ export function Portfolio() {
                 >
                   <Image
                     src={item.src}
-                    alt={`${item.title}${item.location ? ` — ${item.location}` : ""}`}
+                    alt={`${item.title}${item.location ? ` - ${item.location}` : ""}`}
                     fill
                     sizes={
                       featured
@@ -173,16 +183,26 @@ export function Portfolio() {
         <p className="text-muted text-sm">
           Menampilkan {visible.length} dari {items.length} foto
         </p>
-        {limit < items.length && (
-          <button
-            type="button"
-            onClick={() => setLimit((l) => l + PAGE_SIZE)}
-            className="border-ink text-ink hover:bg-ink hover:text-cream inline-flex items-center gap-2 rounded-full border px-6 py-3 font-bold transition-colors"
+        <div className="flex flex-col items-center gap-3 sm:flex-row">
+          {limit < items.length && (
+            <button
+              type="button"
+              onClick={() => setLimit((l) => l + PAGE_SIZE)}
+              className="border-ink text-ink hover:bg-ink hover:text-cream inline-flex items-center gap-2 rounded-full border px-6 py-3 font-bold transition-colors"
+            >
+              <Plus className="size-4" />
+              Tampilkan lebih banyak ({items.length - limit})
+            </button>
+          )}
+          <WaButton
+            intent={intents.portofolio}
+            className="group bg-ink text-cream hover:bg-cocoa inline-flex items-center gap-2 rounded-full px-6 py-3 font-bold transition-colors"
           >
-            <Plus className="size-4" />
-            Tampilkan lebih banyak ({items.length - limit})
-          </button>
-        )}
+            <WhatsAppIcon className="size-4" />
+            Tanya Gorden yang Cocok
+            <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+          </WaButton>
+        </div>
       </div>
 
       <AnimatePresence>

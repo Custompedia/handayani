@@ -54,6 +54,7 @@ export function SectionHeading({
   eyebrow,
   title,
   accent,
+  titleEnd,
   description,
   aside,
   tone = "light",
@@ -61,6 +62,8 @@ export function SectionHeading({
   eyebrow: string;
   title: string;
   accent?: string;
+  /** Teks setelah bagian emas, mis. "Proyek di [Semarang] & sekitarnya." */
+  titleEnd?: string;
   description?: string;
   aside?: ReactNode;
   tone?: "light" | "dark";
@@ -71,7 +74,7 @@ export function SectionHeading({
         <Eyebrow tone={tone}>{eyebrow}</Eyebrow>
         <h2
           className={cn(
-            "mt-4 font-serif text-3xl leading-[1.15] md:text-5xl",
+            "mt-4 font-serif text-3xl leading-[1.15] md:text-[2.6rem]",
             tone === "light" ? "text-ink" : "text-cream",
           )}
         >
@@ -84,6 +87,7 @@ export function SectionHeading({
               >
                 {accent}
               </span>
+              {titleEnd}
             </>
           )}
         </h2>
