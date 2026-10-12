@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { ChevronLeft, ChevronRight, Plus, X } from "lucide-react";
+import { ArrowUpRight, ChevronLeft, ChevronRight, Plus, X } from "lucide-react";
 import { SectionHeading } from "./reveal";
 import {
   portfolio,
@@ -12,7 +12,14 @@ import {
 } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
-const PAGE_SIZE = 8;
+// Satu "blok" = 1 foto besar (2×2) + 8 foto kecil: pas 3 baris di grid 4 kolom
+// (desktop), 4 baris di grid 3 kolom (tablet), dan 5 baris di HP (foto besar
+// selebar layar + 4 baris × 2).
+const PAGE_SIZE = 9;
+
+const categoryLabel = Object.fromEntries(
+  portfolioCategories.map((c) => [c.id, c.label]),
+);
 
 // "Semua" diselang-seling per kategori supaya halaman pertama langsung bervariasi.
 const mixed = (() => {
@@ -62,11 +69,12 @@ export function Portfolio() {
     <section id="portofolio" className="container-page py-20 md:py-28">
       <SectionHeading
         eyebrow="Portofolio"
-        title="Hasil pemasangan kami"
+        title="Hasil pemasangan"
+        accent="kami"
         description="Dari rumah tinggal, townhouse, sampai villa & klinik di Semarang dan sekitarnya."
       />
 
-      <div className="no-scrollbar -mx-5 mt-10 flex gap-2 overflow-x-auto px-5 md:mx-0 md:flex-wrap md:justify-center md:px-0">
+      <div className="no-scrollbar -mx-5 mt-10 flex gap-2 overflow-x-auto px-5 md:mx-0 md:flex-wrap md:px-0">
         {portfolioCategories.map((c) => (
           <button
             key={c.id}
@@ -89,48 +97,83 @@ export function Portfolio() {
 
       <motion.ul
         layout
-        className="mt-8 grid grid-cols-2 gap-3 md:gap-5 lg:grid-cols-4"
+        className="mt-8 grid grid-cols-2 gap-3 md:grid-flow-dense md:grid-cols-3 md:gap-4 lg:grid-cols-4"
       >
         <AnimatePresence mode="popLayout">
-          {visible.map((item, i) => (
-            <motion.li
-              key={item.src}
-              layout
-              initial={{ opacity: 0, scale: 0.96 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.96 }}
-              transition={{ duration: 0.3 }}
-            >
-              <button
-                type="button"
-                onClick={() => setLightbox(i)}
-                className="group bg-sand relative block aspect-[4/5] w-full overflow-hidden rounded-2xl text-left"
+          {visible.map((item, i) => {
+            const featured = i % PAGE_SIZE === 0;
+            // Foto besar bergantian kiri–kanan tiap blok.
+            const flipped = featured && Math.floor(i / PAGE_SIZE) % 2 === 1;
+            return (
+              <motion.li
+                key={item.src}
+                layout
+                initial={{ opacity: 0, scale: 0.96 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.96 }}
+                transition={{ duration: 0.3 }}
+                className={cn(
+                  featured && "col-span-2 md:row-span-2",
+                  flipped && "md:col-start-2 lg:col-start-3",
+                )}
               >
-                <Image
-                  src={item.src}
-                  alt={`${item.title}${item.location ? ` — ${item.location}` : ""}`}
-                  fill
-                  sizes="(min-width: 1024px) 25vw, 50vw"
-                  className="object-cover transition-transform duration-700 group-hover:scale-105"
-                />
-                <div className="from-ink/80 text-cream absolute inset-x-0 bottom-0 bg-gradient-to-t to-transparent p-3 pt-12 md:p-4 md:pt-16">
-                  <p className="text-sm leading-snug font-bold md:text-base">
-                    {item.title}
-                  </p>
-                  {item.location && (
-                    <p className="text-cream/75 mt-0.5 text-xs md:text-sm">
-                      {item.location}
-                    </p>
+                <button
+                  type="button"
+                  onClick={() => setLightbox(i)}
+                  className={cn(
+                    "group bg-sand relative block aspect-[4/5] w-full overflow-hidden rounded-md text-left md:aspect-square",
+                    featured &&
+                      "aspect-square sm:aspect-[4/3] md:aspect-auto md:h-full",
                   )}
-                </div>
-              </button>
-            </motion.li>
-          ))}
+                >
+                  <Image
+                    src={item.src}
+                    alt={`${item.title}${item.location ? ` — ${item.location}` : ""}`}
+                    fill
+                    sizes={
+                      featured
+                        ? "(min-width: 1024px) 50vw, (min-width: 768px) 66vw, 100vw"
+                        : "(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
+                    }
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="from-ink/85 via-ink/30 text-cream absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 bg-gradient-to-t to-transparent p-3 pt-12 sm:p-4 sm:pt-16">
+                    <div className="min-w-0">
+                      <p className="text-cream/80 hidden text-[10px] font-bold tracking-[0.2em] uppercase sm:block">
+                        {categoryLabel[item.category]}
+                      </p>
+                      <p
+                        className={cn(
+                          "font-serif leading-tight sm:mt-1.5",
+                          featured
+                            ? "text-xl sm:text-2xl"
+                            : "text-sm sm:text-lg md:text-base lg:text-lg",
+                        )}
+                      >
+                        {item.title}
+                      </p>
+                      {item.location && (
+                        <p className="text-cream/75 mt-0.5 text-[11px] sm:text-sm">
+                          {item.location}
+                        </p>
+                      )}
+                    </div>
+                    <span className="border-cream/80 group-hover:bg-cream group-hover:text-ink hidden size-9 shrink-0 place-items-center rounded-full border transition-colors sm:grid">
+                      <ArrowUpRight className="size-4" />
+                    </span>
+                  </div>
+                </button>
+              </motion.li>
+            );
+          })}
         </AnimatePresence>
       </motion.ul>
 
-      {limit < items.length && (
-        <div className="mt-10 text-center">
+      <div className="border-linen mt-10 flex flex-col items-center gap-4 border-t pt-6 sm:flex-row sm:justify-between">
+        <p className="text-muted text-sm">
+          Menampilkan {visible.length} dari {items.length} foto
+        </p>
+        {limit < items.length && (
           <button
             type="button"
             onClick={() => setLimit((l) => l + PAGE_SIZE)}
@@ -139,8 +182,8 @@ export function Portfolio() {
             <Plus className="size-4" />
             Tampilkan lebih banyak ({items.length - limit})
           </button>
-        </div>
-      )}
+        )}
+      </div>
 
       <AnimatePresence>
         {current && (

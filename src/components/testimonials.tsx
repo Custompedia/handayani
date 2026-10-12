@@ -95,32 +95,32 @@ export function Testimonials() {
       }}
     >
       <div className="container-page">
-        <div className="flex flex-wrap items-end justify-between gap-6">
-          <SectionHeading
-            align="left"
-            eyebrow="Testimoni"
-            title="Kata mereka tentang Handayani"
-          />
-          <div className="flex gap-2">
-            {([-1, 1] as const).map((dir) => (
-              <button
-                key={dir}
-                type="button"
-                onClick={() => scroll(dir)}
-                className="border-ink/20 bg-cream text-ink hover:bg-ink hover:text-cream grid size-12 place-items-center rounded-full border transition-colors"
-                aria-label={
-                  dir === -1 ? "Testimoni sebelumnya" : "Testimoni berikutnya"
-                }
-              >
-                {dir === -1 ? (
-                  <ChevronLeft className="size-5" />
-                ) : (
-                  <ChevronRight className="size-5" />
-                )}
-              </button>
-            ))}
-          </div>
-        </div>
+        <SectionHeading
+          eyebrow="Testimoni"
+          title="Kata mereka tentang"
+          accent="Handayani"
+          aside={
+            <div className="flex gap-2">
+              {([-1, 1] as const).map((dir) => (
+                <button
+                  key={dir}
+                  type="button"
+                  onClick={() => scroll(dir)}
+                  className="border-ink/20 bg-cream text-ink hover:bg-ink hover:text-cream grid size-12 place-items-center rounded-full border transition-colors"
+                  aria-label={
+                    dir === -1 ? "Testimoni sebelumnya" : "Testimoni berikutnya"
+                  }
+                >
+                  {dir === -1 ? (
+                    <ChevronLeft className="size-5" />
+                  ) : (
+                    <ChevronRight className="size-5" />
+                  )}
+                </button>
+              ))}
+            </div>
+          }
+        />
 
         <ul
           ref={track}
@@ -129,20 +129,28 @@ export function Testimonials() {
           {testimonials.map((t) => (
             <li
               key={t.name}
-              className="bg-cream flex w-[85%] shrink-0 snap-start flex-col rounded-3xl p-7 sm:w-[60%] md:w-[calc((100%-2.5rem)/3)] md:p-8"
+              className="bg-cream border-linen flex w-[85%] shrink-0 snap-start flex-col rounded-md border p-6 sm:w-[60%] md:w-[calc((100%-1.25rem)/2)] md:p-8 lg:w-[calc((100%-2.5rem)/3)]"
             >
-              {t.rating ? (
-                <div
-                  className="text-gold mb-5 flex gap-0.5"
-                  aria-label={`Rating ${t.rating} dari 5`}
+              <div className="flex items-start justify-between gap-4">
+                <span
+                  aria-hidden
+                  className="text-gold font-serif text-6xl leading-[0.8]"
                 >
-                  {Array.from({ length: t.rating }).map((_, i) => (
-                    <Star key={i} className="size-4 fill-current" />
-                  ))}
-                </div>
-              ) : null}
-              <p className="text-ink flex-1 text-[17px] leading-relaxed">
-                “{t.text}”
+                  “
+                </span>
+                {t.rating ? (
+                  <div
+                    className="text-gold flex gap-0.5"
+                    aria-label={`Rating ${t.rating} dari 5`}
+                  >
+                    {Array.from({ length: t.rating }).map((_, i) => (
+                      <Star key={i} className="size-4 fill-current" />
+                    ))}
+                  </div>
+                ) : null}
+              </div>
+              <p className="text-ink mt-4 flex-1 text-base leading-relaxed md:text-[17px]">
+                {t.text}
               </p>
               <div className="border-linen mt-6 flex items-center gap-3 border-t pt-5">
                 <span className="bg-linen text-cocoa grid size-10 place-items-center rounded-full font-serif text-lg uppercase">

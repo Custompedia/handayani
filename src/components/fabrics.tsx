@@ -57,13 +57,14 @@ export function Fabrics() {
       <div className="container-page">
         <SectionHeading
           eyebrow="Koleksi Kain"
-          title="Pilih warna & tekstur favorit"
+          title="Pilih warna &"
+          accent="tekstur favorit"
           description="Katalog contoh kain kami bawakan ke rumah saat survei, jadi Anda bisa lihat langsung warna dan kualitas kainnya."
         />
 
         <div
           role="tablist"
-          className="bg-cream mx-auto mt-10 flex w-fit rounded-full p-1.5 shadow-sm"
+          className="bg-cream mt-10 flex w-fit rounded-full p-1.5 shadow-sm"
         >
           {tabs.map((t) => (
             <button
@@ -99,14 +100,14 @@ export function Fabrics() {
               />
             </div>
             {/* Desktop: semua koleksi tampil sebagai grid kartu. */}
-            <div className="mt-10 hidden gap-5 lg:grid lg:grid-cols-3 xl:grid-cols-4">
+            <div className="mt-8 hidden gap-5 lg:grid lg:grid-cols-3 xl:grid-cols-4">
               {blackoutCollections.map((c) => (
                 <CollectionCard key={c.slug} collection={c} />
               ))}
             </div>
           </>
         ) : (
-          <div className="mt-10 grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-5">
+          <div className="mt-8 grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-5">
             {vitraseFabrics.map((f) => (
               <Reveal key={f.name} className="h-full">
                 <div className="bg-cream flex h-full flex-col overflow-hidden rounded-2xl">
@@ -187,7 +188,7 @@ function FabricStudio({
   }
 
   return (
-    <Reveal className="bg-cream mt-10 overflow-hidden rounded-3xl p-3 shadow-[0_20px_50px_-30px_rgba(42,34,29,0.35)] md:p-4">
+    <Reveal className="bg-cream mt-8 overflow-hidden rounded-3xl p-3 shadow-[0_20px_50px_-30px_rgba(42,34,29,0.35)] md:p-4">
       <div className="bg-linen relative aspect-[4/3] overflow-hidden rounded-2xl md:aspect-[16/9]">
         <AnimatePresence initial={false}>
           <motion.div

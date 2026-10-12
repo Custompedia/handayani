@@ -1,10 +1,11 @@
 import { About } from "@/components/about";
 import { Fabrics } from "@/components/fabrics";
-import { Footer, QuoteCta, WhatsAppFloat } from "@/components/footer";
+import { Footer, WhatsAppFloat } from "@/components/footer";
 import { Header } from "@/components/header";
 import { Hero } from "@/components/hero";
 import { Portfolio } from "@/components/portfolio";
 import { Products } from "@/components/products";
+import { QuoteCta } from "@/components/quote-cta";
 import { Steps } from "@/components/steps";
 import { Testimonials } from "@/components/testimonials";
 

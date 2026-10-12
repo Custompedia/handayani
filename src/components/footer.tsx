@@ -2,43 +2,6 @@ import Image from "next/image";
 import { ArrowRight, Clock, MapPin, Phone } from "lucide-react";
 import { contact, instagramUrl, navLinks, waLink } from "@/lib/data";
 import { InstagramIcon, WhatsAppIcon } from "./icons";
-import { Reveal } from "./reveal";
-
-export function QuoteCta() {
-  return (
-    <section className="relative isolate overflow-hidden">
-      <Image
-        src="/images/cta.webp"
-        alt=""
-        fill
-        sizes="100vw"
-        className="-z-10 object-cover"
-      />
-      <div className="bg-ink/65 absolute inset-0 -z-10" />
-      <div className="container-page text-cream py-24 text-center md:py-32">
-        <Reveal className="mx-auto max-w-2xl">
-          <p className="text-gold text-xs font-bold tracking-[0.25em] uppercase">
-            Estimasi Harga
-          </p>
-          <h2 className="mt-4 font-serif text-3xl leading-tight md:text-5xl">
-            Kirim foto atau ukuran jendela, kami hitungkan penawarannya
-          </h2>
-          <a
-            href={waLink(
-              "Halo Handayani Gorden, saya mau minta penawaran harga. Berikut foto/ukuran jendela saya:",
-            )}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bg-gold text-ink hover:bg-cream mt-9 inline-flex items-center gap-2 rounded-full px-7 py-4 font-bold transition-colors"
-          >
-            <WhatsAppIcon className="size-5" />
-            Minta Penawaran via WhatsApp
-          </a>
-        </Reveal>
-      </div>
-    </section>
-  );
-}
 
 export function Footer() {
   return (
@@ -135,7 +98,7 @@ export function Footer() {
         </div>
       </div>
       <div className="border-cream/10 border-t">
-        <div className="container-page text-cream/50 flex flex-col items-center gap-3 pt-6 pb-24 text-xs min-[1400px]:pb-6 md:flex-row md:justify-between">
+        <div className="container-page text-cream/50 flex flex-col items-center gap-3 pt-6 pb-24 text-center text-xs min-[1400px]:pb-6 md:flex-row md:justify-between">
           <p>
             © <CopyrightYear /> {contact.brand}. Semua hak dilindungi.
           </p>

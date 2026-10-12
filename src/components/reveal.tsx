@@ -2,6 +2,7 @@
 
 import { motion } from "motion/react";
 import type { ReactNode } from "react";
+import { cn } from "@/lib/utils";
 
 export function Reveal({
   children,
@@ -25,33 +26,82 @@ export function Reveal({
   );
 }
 
+export function Eyebrow({
+  children,
+  tone = "light",
+  className,
+}: {
+  children: ReactNode;
+  tone?: "light" | "dark";
+  className?: string;
+}) {
+  return (
+    <p
+      className={cn(
+        "text-xs font-bold tracking-[0.25em] uppercase",
+        tone === "light" ? "text-gold-deep" : "text-gold",
+        className,
+      )}
+    >
+      {children}
+    </p>
+  );
+}
+
+// Judul section ala editorial: eyebrow, judul di kiri, deskripsi
+// (atau aksi seperti tab/tombol) di kanan. `accent` diwarnai emas.
 export function SectionHeading({
   eyebrow,
   title,
+  accent,
   description,
-  align = "center",
+  aside,
+  tone = "light",
 }: {
   eyebrow: string;
   title: string;
+  accent?: string;
   description?: string;
-  align?: "center" | "left";
+  aside?: ReactNode;
+  tone?: "light" | "dark";
 }) {
   return (
-    <Reveal
-      className={
-        align === "center" ? "mx-auto max-w-2xl text-center" : "max-w-2xl"
-      }
-    >
-      <p className="text-gold-deep text-xs font-bold tracking-[0.25em] uppercase">
-        {eyebrow}
-      </p>
-      <h2 className="text-ink mt-3 font-serif text-3xl leading-tight md:text-5xl">
-        {title}
-      </h2>
-      {description && (
-        <p className="text-muted mt-4 text-base leading-relaxed md:text-lg">
-          {description}
-        </p>
+    <Reveal className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between lg:gap-12">
+      <div className="max-w-2xl">
+        <Eyebrow tone={tone}>{eyebrow}</Eyebrow>
+        <h2
+          className={cn(
+            "mt-4 font-serif text-3xl leading-[1.15] md:text-5xl",
+            tone === "light" ? "text-ink" : "text-cream",
+          )}
+        >
+          {title}
+          {accent && (
+            <>
+              {" "}
+              <span
+                className={tone === "light" ? "text-gold-deep" : "text-gold"}
+              >
+                {accent}
+              </span>
+            </>
+          )}
+        </h2>
+      </div>
+      {(description || aside) && (
+        <div className="max-w-xl shrink-0 lg:max-w-sm lg:pb-1.5">
+          {description && (
+            <p
+              className={cn(
+                "text-base leading-relaxed",
+                tone === "light" ? "text-muted" : "text-cream/70",
+              )}
+            >
+              {description}
+            </p>
+          )}
+          {aside}
+        </div>
       )}
     </Reveal>
   );

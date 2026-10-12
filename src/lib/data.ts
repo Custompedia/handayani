@@ -294,27 +294,27 @@ export const portfolio: PortfolioItem[] = [
 export const steps = [
   {
     title: "Konsultasi",
-    body: "Hubungi kami lewat WhatsApp atau datang ke alamat kami. Sampaikan model dan warna gorden yang Anda inginkan.",
+    body: "Chat WhatsApp atau datang ke toko, ceritakan model & warna yang diinginkan.",
   },
   {
     title: "Survei & ukur",
-    body: "Kami bantu ukur ulang dan bawakan katalog contoh kain ke rumah, jadi Anda bisa lihat langsung warna dan kualitas kainnya. Gratis untuk area Kota Semarang.",
+    body: "Kami ukur dan bawakan katalog kain ke rumah. Gratis area Kota Semarang.",
   },
   {
     title: "Penawaran harga",
-    body: "Kami bantu hitungkan total kebutuhan gorden yang Anda inginkan.",
+    body: "Kami hitungkan total kebutuhan gorden Anda.",
   },
   {
     title: "DP minimal 30%",
-    body: "Kalau cocok, Anda bisa DP dulu minimal 30% dari total. Pembayaran bisa cash ataupun transfer.",
+    body: "Kalau cocok, DP dulu. Bisa cash atau transfer.",
   },
   {
     title: "Pengerjaan ±7 hari",
-    body: "Proses pengerjaan gorden kurang lebih 7 hari.",
+    body: "Gorden dikerjakan kurang lebih 7 hari.",
   },
   {
     title: "Pasang, baru lunas",
-    body: "Pelunasan dilakukan setelah proses pemasangan.",
+    body: "Pelunasan setelah gorden selesai dipasang.",
   },
 ];
 
