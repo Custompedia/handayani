@@ -35,4 +35,21 @@ The site is a static export (`output: "export"` in `next.config.ts`): `next buil
 
 Pages build settings: build command `npx next build`, output directory `out`. Every push to `main` deploys automatically.
 
+### Branches & domains
+
+| Branch            | Domain                                 | Purpose                                                   |
+| ----------------- | -------------------------------------- | --------------------------------------------------------- |
+| `main`            | https://gordensemarang.custompedia.id  | Production: the live landing page used for ads.           |
+| `handayanigorden` | https://handayanigorden.custompedia.id | Review: client previews changes here before they go live. |
+
+Workflow: commit and push to `handayanigorden`, check the result on `handayanigorden.custompedia.id`, and once the client approves, merge `handayanigorden` into `main` to publish it on `gordensemarang.custompedia.id`. Never push unreviewed work straight to `main`.
+
+`handayanigorden` replaces the old `staging` branch (renamed so the branch matches its domain).
+
+To serve the branch on its domain (Cloudflare dashboard, `custompedia.id` DNS is on Cloudflare):
+
+1. Workers & Pages > project `handayani` > Settings > Builds > Branch control: make sure `handayanigorden` is included in the preview branches, and that it has a successful deployment.
+2. Custom domains > Set up a custom domain > `handayanigorden.custompedia.id` > Activate domain.
+3. DNS for `custompedia.id`: edit the `handayanigorden` CNAME so it targets the branch alias `handayanigorden.<project>.pages.dev` instead of `<project>.pages.dev`. Keep it **Proxied**; an unproxied record falls back to the `main` deployment.
+
 Because there is no server, features that need one (image optimization, Cache Components/PPR, ISR, Server Actions, route handlers that read the request) are not available. Images are served as-is, so keep them pre-sized WebP. `public/_headers` sets the cache headers Pages applies.
