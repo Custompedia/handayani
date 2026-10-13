@@ -28,6 +28,10 @@ export const intents = {
     title: "Jadwalkan Survei Gratis",
     line: "Saya mau jadwalkan survei gratis ke rumah.",
   },
+  estimasi: {
+    title: "Minta Estimasi Biaya",
+    line: "Saya mau konsultasi dan minta estimasi biaya gorden untuk rumah saya.",
+  },
   portofolio: {
     title: "Tanya Gorden yang Cocok",
     line: "Saya sudah lihat portofolio Handayani dan mau diskusi gorden yang cocok untuk rumah saya.",

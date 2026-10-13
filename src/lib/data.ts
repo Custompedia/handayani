@@ -186,10 +186,75 @@ export const blackoutCollections: FabricCollection[] = [
       "23",
     ],
   },
+  {
+    name: "Belgium A",
+    slug: "belgium-a",
+    codes: ["1", "2", "3", "4", "5", "6", "7", "8"],
+  },
+  {
+    name: "Belgium B",
+    slug: "belgium-b",
+    codes: ["1", "2", "3", "4", "5", "6", "7", "8"],
+  },
+  {
+    name: "Belgium FT340",
+    slug: "belgium-ft340",
+    codes: ["BR", "CR", "GREY", "WH"],
+  },
+  {
+    name: "Kyoto A",
+    slug: "kyoto-a",
+    codes: ["1", "2", "3", "6", "7", "8", "9"],
+  },
+  {
+    name: "Kyoto B",
+    slug: "kyoto-b",
+    codes: ["1", "2", "3", "6", "7", "8", "9"],
+  },
+  {
+    name: "Liverpool Dimout A",
+    slug: "liverpool-a",
+    codes: ["1", "2", "3", "4", "5"],
+  },
+  {
+    name: "Liverpool Dimout B",
+    slug: "liverpool-b",
+    codes: ["1", "2", "3", "4", "5"],
+  },
+  {
+    name: "Tiara",
+    slug: "tiara",
+    codes: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+  },
+  {
+    name: "Yobel A",
+    slug: "yobel-a",
+    codes: ["1", "2", "3", "4", "5", "6", "7"],
+  },
+  {
+    name: "Yobel B",
+    slug: "yobel-b",
+    codes: ["1", "2", "3", "4", "5", "6", "7"],
+  },
+  {
+    name: "Yobel C",
+    slug: "yobel-c",
+    codes: ["1", "2", "3", "4", "5", "6", "7"],
+  },
 ];
 
+function swatchFile(slug: string, code: string) {
+  return `${slug}-${code.replace(/[^A-Za-z0-9]/g, "")}.webp`;
+}
+
+/** Foto kain ukuran penuh (960px) untuk preview besar. */
 export function swatchSrc(slug: string, code: string) {
-  return `/images/kain/${slug}-${code.replace(/[^A-Za-z0-9]/g, "")}.webp`;
+  return `/images/kain/${swatchFile(slug, code)}`;
+}
+
+/** Potongan persegi 160px untuk chip & bulatan warna. */
+export function swatchThumbSrc(slug: string, code: string) {
+  return `/images/kain/thumb/${swatchFile(slug, code)}`;
 }
 
 export const vitraseFabrics = [

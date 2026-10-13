@@ -10,8 +10,8 @@ import { Reveal, SectionHeading } from "./reveal";
 import {
   blackoutCollections,
   swatchSrc,
+  swatchThumbSrc,
   vitraseFabrics,
-  type FabricCollection,
 } from "@/lib/data";
 import { cn } from "@/lib/utils";
 import { WaButton } from "./wa-form";
@@ -42,11 +42,7 @@ export function Fabrics() {
       if (index < 0) return;
       setTab("blackout");
       setCollection(index);
-      // Desktop: langsung ke kartu koleksinya. HP: ke katalog "ruang pas".
-      const card = document.getElementById(
-        `kain-${blackoutCollections[index].slug}`,
-      );
-      (card?.offsetParent ? card : catalogRef.current)?.scrollIntoView();
+      catalogRef.current?.scrollIntoView();
     };
     openFromHash();
     window.addEventListener("hashchange", openFromHash);
@@ -109,21 +105,10 @@ export function Fabrics() {
         </div>
 
         {tab === "blackout" ? (
-          <>
-            {/* HP & tablet: satu "ruang pas" supaya katalog tidak panjang. */}
-            <div className="lg:hidden">
-              <FabricStudio
-                collectionIndex={collection}
-                onCollectionChange={setCollection}
-              />
-            </div>
-            {/* Desktop: semua koleksi tampil sebagai grid kartu. */}
-            <div className="mt-8 hidden gap-5 lg:grid lg:grid-cols-3 xl:grid-cols-4">
-              {blackoutCollections.map((c) => (
-                <CollectionCard key={c.slug} collection={c} />
-              ))}
-            </div>
-          </>
+          <FabricStudio
+            collectionIndex={collection}
+            onCollectionChange={setCollection}
+          />
         ) : (
           <div className="mt-8 grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-5">
             {vitraseFabrics.map((f) => (
@@ -165,8 +150,9 @@ export function Fabrics() {
   );
 }
 
-// Satu"ruang pas": preview kain besar, lalu pilih koleksi dan warnanya.
-// Dipakai di HP & tablet; jauh lebih pendek daripada menampilkan 16 kartu koleksi berurutan.
+// "Ruang pas": preview kain besar, lalu pilih koleksi dan warnanya.
+// Satu panel untuk semua layar: jauh lebih ringkas daripada menampilkan
+// puluhan kartu koleksi, dan hanya satu foto besar yang dimuat sekaligus.
 function FabricStudio({
   collectionIndex,
   onCollectionChange,
@@ -181,7 +167,8 @@ function FabricStudio({
   const [chipsAtEnd, setChipsAtEnd] = useState(false);
   const chipsRef = useRef<HTMLDivElement>(null);
 
-  // Geser chip koleksi yang aktif ke tengah (scroller horizontal di HP).
+  // Geser chip koleksi yang aktif ke tengah (scroller horizontal di HP;
+  // di desktop chip-nya membungkus jadi tidak perlu digeser).
   useEffect(() => {
     const scroller = chipsRef.current;
     const chip = scroller?.children[collectionIndex] as HTMLElement | undefined;
@@ -206,8 +193,8 @@ function FabricStudio({
   }
 
   return (
-    <Reveal className="bg-cream mt-8 overflow-hidden rounded-3xl p-3 shadow-[0_20px_50px_-30px_rgba(42,34,29,0.35)] md:p-4">
-      <div className="bg-linen relative aspect-[4/3] overflow-hidden rounded-2xl md:aspect-[16/9]">
+    <Reveal className="bg-cream mt-8 overflow-hidden rounded-3xl p-3 shadow-[0_20px_50px_-30px_rgba(42,34,29,0.35)] md:p-4 lg:grid lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:items-start lg:gap-8 lg:p-5">
+      <div className="bg-linen relative aspect-[4/3] overflow-hidden rounded-2xl">
         <AnimatePresence initial={false}>
           <motion.div
             key={`${collection.slug}-${code}`}
@@ -221,7 +208,7 @@ function FabricStudio({
               src={swatchSrc(collection.slug, code)}
               alt={`Kain blackout ${collection.name} warna ${code}`}
               fill
-              sizes="100vw"
+              sizes="(min-width: 1024px) 55vw, 100vw"
               className="object-cover"
             />
           </motion.div>
@@ -231,8 +218,7 @@ function FabricStudio({
             Blackout
           </p>
           <p className="mt-1 font-serif text-2xl leading-tight md:text-3xl">
-            {collection.name}
-            {""}
+            {collection.name}{" "}
             <span className="text-gold font-sans text-base font-bold md:text-lg">
               · {code}
             </span>
@@ -240,16 +226,17 @@ function FabricStudio({
         </div>
       </div>
 
-      <div className="flex flex-col px-2 pt-6 pb-2 md:px-3">
+      <div className="flex flex-col px-2 pt-6 pb-2 md:px-3 lg:px-0 lg:pt-1">
         <div className="flex items-baseline justify-between gap-3">
           <p className="text-gold-deep text-xs font-bold tracking-[0.25em] uppercase">
             Pilih koleksi
           </p>
           <p className="text-muted text-xs">
-            {blackoutCollections.length} koleksi · geser →
+            {blackoutCollections.length} koleksi
+            <span className="lg:hidden"> · geser →</span>
           </p>
         </div>
-        <div className="relative mt-3 -mr-5 md:-mr-7">
+        <div className="relative mt-3 -mr-5 md:-mr-7 lg:mr-0">
           <div
             ref={chipsRef}
             onScroll={(e) => {
@@ -258,7 +245,7 @@ function FabricStudio({
                 el.scrollLeft + el.clientWidth >= el.scrollWidth - 4,
               );
             }}
-            className="no-scrollbar flex gap-2 overflow-x-auto pr-5 md:pr-7"
+            className="no-scrollbar flex gap-2 overflow-x-auto pr-5 md:pr-7 lg:flex-wrap lg:overflow-visible lg:pr-0"
           >
             {blackoutCollections.map((c, i) => (
               <button
@@ -267,15 +254,15 @@ function FabricStudio({
                 onClick={() => onCollectionChange(i)}
                 aria-pressed={i === collectionIndex}
                 className={cn(
-                  "flex shrink-0 items-center gap-2 rounded-full border py-1.5 pr-4 pl-1.5 text-sm font-semibold transition-colors",
+                  "flex shrink-0 items-center gap-2 rounded-full border py-1.5 pr-4 pl-1.5 text-sm font-semibold transition-colors lg:pr-3.5 lg:text-[13px]",
                   i === collectionIndex
                     ? "border-ink bg-ink text-cream"
                     : "border-linen text-ink hover:border-ink bg-white",
                 )}
               >
-                <span className="relative size-7 shrink-0 overflow-hidden rounded-full">
+                <span className="relative size-7 shrink-0 overflow-hidden rounded-full lg:size-6">
                   <Image
-                    src={swatchSrc(c.slug, codes[c.slug] ?? c.codes[0])}
+                    src={swatchThumbSrc(c.slug, codes[c.slug] ?? c.codes[0])}
                     alt=""
                     fill
                     sizes="28px"
@@ -288,7 +275,7 @@ function FabricStudio({
           </div>
           <div
             className={cn(
-              "from-cream pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l to-transparent transition-opacity",
+              "from-cream pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l to-transparent transition-opacity lg:hidden",
               chipsAtEnd && "opacity-0",
             )}
           />
@@ -320,7 +307,7 @@ function FabricStudio({
               )}
             >
               <Image
-                src={swatchSrc(collection.slug, c)}
+                src={swatchThumbSrc(collection.slug, c)}
                 alt=""
                 fill
                 sizes="44px"
@@ -357,73 +344,5 @@ function FabricStudio({
         </div>
       </div>
     </Reveal>
-  );
-}
-
-function CollectionCard({ collection }: { collection: FabricCollection }) {
-  const [active, setActive] = useState(collection.codes[0]);
-
-  return (
-    <div
-      id={`kain-${collection.slug}`}
-      className="bg-cream flex flex-col overflow-hidden rounded-2xl"
-    >
-      <div className="relative aspect-[4/3]">
-        <Image
-          src={swatchSrc(collection.slug, active)}
-          alt={`Kain blackout ${collection.name} warna ${active}`}
-          fill
-          sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-          className="object-cover"
-        />
-        <span className="bg-cream/90 absolute top-3 left-3 rounded-full px-3 py-1 text-xs font-bold backdrop-blur">
-          {active}
-        </span>
-      </div>
-      <div className="flex flex-1 flex-col p-4">
-        <div className="flex items-baseline justify-between gap-2">
-          <h3 className="font-serif text-xl">{collection.name}</h3>
-          <span className="text-muted text-xs">
-            {collection.codes.length} warna
-          </span>
-        </div>
-        <div className="mt-3 flex flex-wrap gap-1.5">
-          {collection.codes.map((code) => (
-            <button
-              key={code}
-              type="button"
-              onClick={() => setActive(code)}
-              aria-label={`${collection.name} warna ${code}`}
-              aria-pressed={active === code}
-              className={cn(
-                "ring-offset-cream relative size-7 overflow-hidden rounded-full ring-offset-2 transition",
-                active === code
-                  ? "ring-ink ring-2"
-                  : "ring-linen hover:ring-muted ring-1",
-              )}
-            >
-              <Image
-                src={swatchSrc(collection.slug, code)}
-                alt=""
-                fill
-                sizes="28px"
-                className="object-cover"
-              />
-            </button>
-          ))}
-        </div>
-        <WaButton
-          intent={{
-            title: `Tanya ${collection.name} ${active}`,
-            line: `Saya tertarik dengan kain blackout ${collection.name} warna ${active}.`,
-            need: "blackout",
-          }}
-          className="text-gold-deep hover:text-ink mt-4 inline-flex items-center gap-1.5 self-start pt-1 text-sm font-bold"
-        >
-          <WhatsAppIcon className="size-4" />
-          Tanya warna {active}
-        </WaButton>
-      </div>
-    </div>
   );
 }

@@ -1,12 +1,9 @@
 import Image from "next/image";
-import { Check } from "lucide-react";
+import { ArrowRight } from "lucide-react";
+import { WhatsAppIcon } from "./icons";
 import { Eyebrow, Reveal } from "./reveal";
-
-const promises = [
-  "Gratis konsultasi",
-  "Survei gratis Kota Semarang",
-  "Katalog pilihan kain",
-];
+import { intents } from "@/lib/wa-intents";
+import { WaButton } from "./wa-form";
 
 export function QuoteCta() {
   return (
@@ -31,16 +28,14 @@ export function QuoteCta() {
             Kami bantu memilih kain dan model gorden, lalu memberikan estimasi
             biaya yang disesuaikan dengan kebutuhan.
           </p>
-          <ul className="text-cream/85 mt-7 flex flex-wrap justify-center gap-x-6 gap-y-3 text-sm">
-            {promises.map((p) => (
-              <li key={p} className="flex items-center gap-2">
-                <span className="border-gold/60 text-gold grid size-5 shrink-0 place-items-center rounded-full border">
-                  <Check className="size-3" />
-                </span>
-                {p}
-              </li>
-            ))}
-          </ul>
+          <WaButton
+            intent={intents.estimasi}
+            className="group bg-gold text-ink hover:bg-cream mt-8 inline-flex items-center justify-center gap-2 rounded-full px-7 py-4 font-bold transition-colors"
+          >
+            <WhatsAppIcon className="size-5" />
+            Minta Estimasi via WhatsApp
+            <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+          </WaButton>
         </Reveal>
       </div>
     </section>
