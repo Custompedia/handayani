@@ -4,50 +4,64 @@ import {
   createContext,
   useContext,
   useEffect,
+  useId,
   useRef,
   useState,
   type ReactNode,
 } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { ChevronDown, X } from "lucide-react";
+import { Check, ChevronDown, MapPin, X } from "lucide-react";
 import { waLink } from "@/lib/data";
-import { needs, type Need, type WaIntent } from "@/lib/wa-intents";
+import { conditions, type WaIntent } from "@/lib/wa-intents";
+import {
+  loadWilayah,
+  normalize,
+  rankMatches,
+  type Wilayah,
+} from "@/lib/wilayah";
+import { cn } from "@/lib/utils";
 
 // Semua tombol "ke WhatsApp" membuka popup form ini dulu. Setelah diisi,
 // pengunjung diarahkan ke WhatsApp dengan pesan yang disusun dari isian
 // dan dari tombol yang diklik (intent).
 
-const rooms = [
-  "Ruang tamu",
-  "Kamar tidur",
-  "Ruang keluarga",
-  "Ruang makan",
-  "Kantor / komersial",
-  "Lainnya",
-];
+type FormState = {
+  name: string;
+  condition: string;
+  kecamatan: string;
+  kota: string;
+  need: string;
+};
 
-function roomPhrase(room: string) {
-  return room === "Lainnya" ? "ruangan saya" : room.toLowerCase();
-}
+const emptyForm: FormState = {
+  name: "",
+  condition: "",
+  kecamatan: "",
+  kota: "",
+  need: "",
+};
 
-function buildMessage(
-  intent: WaIntent,
-  form: { name: string; location: string; need: Need; room: string },
-) {
-  const room = roomPhrase(form.room);
-  const needLine: Record<Need, string> = {
-    blackout: `Saya tertarik gorden blackout untuk ${room}.`,
-    vitrase: `Saya tertarik gorden vitrase untuk ${room}.`,
-    both: `Saya mau pasang gorden blackout + vitrase untuk ${room}.`,
-    unsure: `Saya belum tahu pilih gorden yang mana untuk ${room}, mohon sarannya.`,
-  };
+// Label & urutan sama persis dengan isian di form, supaya admin membaca
+// pesan WA dengan struktur yang sama seperti yang diisi pengunjung.
+function buildMessage(intent: WaIntent, form: FormState) {
+  const hint = conditions.find((c) => c.value === form.condition);
+  const condition =
+    hint && "hint" in hint
+      ? `${form.condition} (${hint.hint.toLowerCase()})`
+      : form.condition;
+  const location = [form.kecamatan.trim(), form.kota]
+    .filter(Boolean)
+    .join(", ");
   return [
-    `Halo Handayani Gorden, saya ${form.name.trim()} dari ${form.location.trim()}.`,
+    "Halo Handayani Gorden,",
     intent.line,
-    intent.need === form.need
-      ? `Rencananya untuk ${room}.`
-      : needLine[form.need],
-    "Boleh dibantu informasinya? Foto atau ukuran jendela bisa saya kirim di chat ini.",
+    "",
+    `*Nama:* ${form.name.trim()}`,
+    `*Kondisi rumah:* ${condition}`,
+    `*Lokasi:* ${location}`,
+    `*Kebutuhan:* ${form.need.trim() || "-"}`,
+    "",
+    "Foto atau ukuran jendela bisa saya kirim di chat ini. Terima kasih.",
   ].join("\n");
 }
 
@@ -92,17 +106,14 @@ const fieldClass =
 
 export function WaFormProvider({ children }: { children: ReactNode }) {
   const [intent, setIntent] = useState<WaIntent | null>(null);
-  const [form, setForm] = useState({
-    name: "",
-    location: "",
-    need: "unsure" as Need,
-    room: rooms[0],
-  });
+  const [form, setForm] = useState<FormState>(emptyForm);
   const linkRef = useRef<HTMLAnchorElement>(null);
 
   const open = (next: WaIntent) => {
     setIntent(next);
-    setForm((prev) => ({ ...prev, need: next.need ?? prev.need }));
+    // Nama, kondisi & lokasi diingat antar-tombol; kebutuhan hanya terisi
+    // kalau tombolnya dari katalog.
+    setForm((prev) => ({ ...prev, need: next.need ?? "" }));
   };
   const close = () => setIntent(null);
 
@@ -181,35 +192,28 @@ export function WaFormProvider({ children }: { children: ReactNode }) {
                     className={fieldClass}
                   />
                 </Field>
-                <Field label="Lokasi">
-                  <input
-                    type="text"
-                    required
-                    placeholder="Kecamatan / perumahan"
-                    value={form.location}
-                    onChange={(e) =>
-                      setForm((p) => ({ ...p, location: e.target.value }))
+                <Field label="Kondisi rumah" as="div">
+                  <ConditionPicker
+                    value={form.condition}
+                    onChange={(condition) =>
+                      setForm((p) => ({ ...p, condition }))
                     }
-                    className={fieldClass}
                   />
                 </Field>
+                <LocationFields
+                  kecamatan={form.kecamatan}
+                  kota={form.kota}
+                  onChange={(next) => setForm((p) => ({ ...p, ...next }))}
+                />
                 <Field label="Kebutuhan">
-                  <Select
+                  <textarea
+                    rows={3}
+                    placeholder="Opsional, mis. blackout untuk kamar & vitrase ruang tamu"
                     value={form.need}
-                    onChange={(v) =>
-                      setForm((p) => ({ ...p, need: v as Need }))
+                    onChange={(e) =>
+                      setForm((p) => ({ ...p, need: e.target.value }))
                     }
-                    options={Object.entries(needs).map(([value, label]) => ({
-                      value,
-                      label,
-                    }))}
-                  />
-                </Field>
-                <Field label="Ruangan">
-                  <Select
-                    value={form.room}
-                    onChange={(v) => setForm((p) => ({ ...p, room: v }))}
-                    options={rooms.map((r) => ({ value: r, label: r }))}
+                    className={cn(fieldClass, "min-h-24 resize-y")}
                   />
                 </Field>
               </div>
@@ -236,40 +240,300 @@ export function WaFormProvider({ children }: { children: ReactNode }) {
   );
 }
 
-function Field({ label, children }: { label: string; children: ReactNode }) {
+function Field({
+  label,
+  children,
+  as: Tag = "label",
+}: {
+  label: string;
+  children: ReactNode;
+  as?: "label" | "div";
+}) {
   return (
-    <label className="block">
+    <Tag className="block">
       <span className="mb-1.5 block text-xs font-bold tracking-wide">
         {label}
       </span>
       {children}
-    </label>
+    </Tag>
   );
 }
 
-function Select({
+// Tiga pilihan dalam satu kontrol segmen yang sama tinggi; latar aktifnya
+// meluncur. Keterangan "pindahan" baru muncul saat pilihan itu aktif.
+function ConditionPicker({
   value,
-  options,
   onChange,
 }: {
   value: string;
-  options: { value: string; label: string }[];
   onChange: (value: string) => void;
 }) {
+  const name = useId();
+  const active = conditions.find((c) => c.value === value);
+  return (
+    <div>
+      <div className="border-linen grid grid-cols-3 gap-1 rounded-md border bg-white p-1">
+        {conditions.map((c) => {
+          const isActive = value === c.value;
+          return (
+            <label
+              key={c.value}
+              className={cn(
+                "has-[:focus-visible]:ring-gold-deep relative flex min-h-11 cursor-pointer items-center justify-center rounded px-1.5 text-center text-[13px] leading-tight font-semibold transition-colors has-[:focus-visible]:ring-2 sm:text-sm",
+                isActive ? "text-cream" : "text-ink hover:bg-sand",
+              )}
+            >
+              {isActive && (
+                <motion.span
+                  layoutId="wa-condition"
+                  className="bg-ink absolute inset-0 rounded"
+                  transition={{ type: "spring", bounce: 0.18, duration: 0.45 }}
+                />
+              )}
+              <input
+                type="radio"
+                name={name}
+                required
+                value={c.value}
+                checked={isActive}
+                onChange={() => onChange(c.value)}
+                className="sr-only"
+              />
+              <span className="relative">{c.value}</span>
+            </label>
+          );
+        })}
+      </div>
+      <AnimatePresence initial={false}>
+        {active && "hint" in active && (
+          <motion.p
+            className="text-muted overflow-hidden text-xs"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <span className="block pt-1.5">{active.hint}</span>
+          </motion.p>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+// Kecamatan & kabupaten/kota se-Indonesia (data dimuat saat form dibuka).
+// Memilih kecamatan langsung mengisi kab/kotanya; kalau kab/kota diisi dulu,
+// saran kecamatan ikut disaring. Teks di luar daftar tetap boleh diketik.
+function LocationFields({
+  kecamatan,
+  kota,
+  onChange,
+}: {
+  kecamatan: string;
+  kota: string;
+  onChange: (next: { kecamatan?: string; kota?: string }) => void;
+}) {
+  const [data, setData] = useState<Wilayah | null>(null);
+  const [failed, setFailed] = useState(false);
+
+  useEffect(() => {
+    loadWilayah()
+      .then(setData)
+      .catch(() => setFailed(true));
+  }, []);
+
+  const kotaQuery = normalize(kota);
+  const chosenKota = data?.kota.find((k) => normalize(k.nama) === kotaQuery);
+  const picked =
+    !!chosenKota &&
+    data!.kecamatan.some((k) => k.kota === chosenKota && k.nama === kecamatan);
+
+  const kecamatanOptions = data
+    ? rankMatches(
+        chosenKota
+          ? data.kecamatan.filter((k) => k.kota === chosenKota)
+          : data.kecamatan,
+        kecamatan,
+        (k) => k.nama,
+        (k) => k.kota.rank,
+      )
+    : [];
+  const kotaOptions = data
+    ? rankMatches(
+        data.kota,
+        kota,
+        (k) => k.nama,
+        (k) => k.rank,
+      )
+    : [];
+  const status = failed
+    ? "Daftar wilayah gagal dimuat, silakan ketik manual."
+    : !data
+      ? "Memuat daftar wilayah…"
+      : null;
+
+  return (
+    <div className="grid gap-4 sm:grid-cols-2 sm:gap-3">
+      <Field label="Kecamatan">
+        <Combobox
+          icon={<MapPin className="size-4" />}
+          placeholder="Cari kecamatan"
+          value={kecamatan}
+          status={status}
+          options={kecamatanOptions.map((k) => ({
+            key: `${k.nama}|${k.kota.nama}`,
+            label: k.nama,
+            sub: k.kota.nama,
+          }))}
+          done={picked}
+          listClassName="sm:w-[calc(200%+0.75rem)]"
+          onInput={(text) =>
+            // Teks diubah setelah memilih: kab/kota ikut dikosongkan lagi
+            // supaya tidak tertinggal pasangan yang salah.
+            onChange(
+              picked ? { kecamatan: text, kota: "" } : { kecamatan: text },
+            )
+          }
+          onPick={(i) => {
+            const k = kecamatanOptions[i];
+            onChange({ kecamatan: k.nama, kota: k.kota.nama });
+          }}
+        />
+      </Field>
+      <Field label="Kabupaten / kota">
+        <Combobox
+          placeholder="Cari kab/kota"
+          value={kota}
+          status={status}
+          options={kotaOptions.map((k) => ({
+            key: k.nama,
+            label: k.nama,
+            sub: k.provinsi,
+          }))}
+          done={!!chosenKota}
+          listClassName="sm:left-auto sm:right-0 sm:w-[calc(200%+0.75rem)]"
+          onInput={(text) => onChange({ kota: text })}
+          onPick={(i) => onChange({ kota: kotaOptions[i].nama })}
+        />
+      </Field>
+    </div>
+  );
+}
+
+function Combobox({
+  value,
+  placeholder,
+  icon,
+  options,
+  status,
+  done,
+  listClassName,
+  onInput,
+  onPick,
+}: {
+  value: string;
+  placeholder: string;
+  icon?: ReactNode;
+  options: { key: string; label: string; sub: string }[];
+  status: string | null;
+  /** Nilai sudah cocok dengan data: daftar disembunyikan, tampil centang. */
+  done: boolean;
+  listClassName?: string;
+  onInput: (text: string) => void;
+  onPick: (index: number) => void;
+}) {
+  const listId = useId();
+  const [open, setOpen] = useState(false);
+  const [highlight, setHighlight] = useState(0);
+  const showList = open && !done && (options.length > 0 || !!status);
+
   return (
     <div className="relative">
-      <select
+      {icon && (
+        <span className="text-muted pointer-events-none absolute top-1/2 left-3.5 -translate-y-1/2">
+          {icon}
+        </span>
+      )}
+      <input
+        type="text"
+        required
+        role="combobox"
+        aria-expanded={showList}
+        aria-controls={listId}
+        aria-autocomplete="list"
+        autoComplete="off"
+        placeholder={placeholder}
         value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className={`${fieldClass} appearance-none pr-10`}
-      >
-        {options.map((o) => (
-          <option key={o.value} value={o.value}>
-            {o.label}
-          </option>
-        ))}
-      </select>
-      <ChevronDown className="text-muted pointer-events-none absolute top-1/2 right-3.5 size-4 -translate-y-1/2" />
+        onFocus={() => setOpen(true)}
+        onBlur={() => setOpen(false)}
+        onChange={(e) => {
+          onInput(e.target.value);
+          setOpen(true);
+          setHighlight(0);
+        }}
+        onKeyDown={(e) => {
+          if (!showList || !options.length) return;
+          if (e.key === "ArrowDown") {
+            e.preventDefault();
+            setHighlight((h) => (h + 1) % options.length);
+          } else if (e.key === "ArrowUp") {
+            e.preventDefault();
+            setHighlight((h) => (h - 1 + options.length) % options.length);
+          } else if (e.key === "Enter") {
+            e.preventDefault();
+            onPick(Math.min(highlight, options.length - 1));
+            setOpen(false);
+          } else if (e.key === "Escape") {
+            // Tutup daftar saja, bukan popup-nya.
+            e.stopPropagation();
+            setOpen(false);
+          }
+        }}
+        className={cn(fieldClass, icon ? "pr-9 pl-10" : "pr-9")}
+      />
+      {done ? (
+        <Check className="text-gold-deep pointer-events-none absolute top-1/2 right-3.5 size-4 -translate-y-1/2" />
+      ) : (
+        <ChevronDown className="text-muted pointer-events-none absolute top-1/2 right-3.5 size-4 -translate-y-1/2" />
+      )}
+      {showList && (
+        <ul
+          id={listId}
+          role="listbox"
+          className={cn(
+            "border-linen absolute top-full left-0 z-10 mt-1 max-h-64 w-full overflow-y-auto rounded-md border bg-white py-1 shadow-[0_20px_40px_-20px_rgba(42,34,29,0.45)]",
+            listClassName,
+          )}
+        >
+          {status && !options.length ? (
+            <li className="text-muted px-4 py-2 text-sm">{status}</li>
+          ) : (
+            options.map((o, i) => (
+              <li
+                key={o.key}
+                role="option"
+                aria-selected={i === highlight}
+                // mousedown supaya terpilih sebelum input kehilangan fokus
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  onPick(i);
+                  setOpen(false);
+                }}
+                onMouseEnter={() => setHighlight(i)}
+                className={cn(
+                  "flex cursor-pointer items-baseline justify-between gap-3 px-4 py-2 text-sm",
+                  i === highlight && "bg-sand",
+                )}
+              >
+                <span className="font-semibold">{o.label}</span>
+                <span className="text-muted shrink-0 text-right text-xs">
+                  {o.sub}
+                </span>
+              </li>
+            ))
+          )}
+        </ul>
+      )}
     </div>
   );
 }

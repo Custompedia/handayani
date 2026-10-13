@@ -36,7 +36,7 @@ export function CollectionCards() {
               intent={{
                 title: `Tanya ${c.name}`,
                 line: `Saya mau tanya pilihan kain ${c.name}.`,
-                need: c.need,
+                need: `Gorden ${c.name}`,
               }}
               className="group text-ink decoration-gold hover:text-gold-deep mt-6 inline-flex items-center gap-2 self-start text-sm font-bold underline underline-offset-[6px]"
             >

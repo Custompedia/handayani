@@ -32,7 +32,6 @@ export const collections = [
     description:
       "Seimbangkan kebutuhan privasi, kenyamanan, dan pencahayaan untuk berbagai ruang.",
     image: "/images/portfolio/p07_0.webp",
-    need: "blackout" as const,
   },
   {
     type: "Privasi maksimal",
@@ -40,7 +39,6 @@ export const collections = [
     description:
       "Pilihan untuk ruang yang membutuhkan penghalang cahaya lebih tinggi, seperti kamar tidur.",
     image: "/images/portfolio/p10_3.webp",
-    need: "blackout" as const,
   },
   {
     type: "Cahaya lebih lembut",
@@ -48,7 +46,6 @@ export const collections = [
     description:
       "Sentuhan ringan yang membantu membuat cahaya masuk lebih lembut dan ruangan tampak anggun.",
     image: "/images/produk-vitrase-hd.webp",
-    need: "vitrase" as const,
   },
 ];
 
@@ -255,6 +252,11 @@ export function swatchSrc(slug: string, code: string) {
 /** Potongan persegi 160px untuk chip & bulatan warna. */
 export function swatchThumbSrc(slug: string, code: string) {
   return `/images/kain/thumb/${swatchFile(slug, code)}`;
+}
+
+/** Tekstur 256px yang sudah diratakan cahayanya & bisa diulang tanpa sambungan. */
+export function swatchTileSrc(slug: string, code: string) {
+  return `/images/kain/tile/${swatchFile(slug, code)}`;
 }
 
 export const vitraseFabrics = [
