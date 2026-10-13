@@ -127,6 +127,7 @@ export function Fabrics() {
                       intent={{
                         title: `Tanya ${f.name}`,
                         line: `Saya tertarik dengan kain vitrase ${f.name}.`,
+                        closing: "Mohon bantu info harga dan estimasinya.",
                         need: /vitrase/i.test(f.name)
                           ? f.name
                           : `Vitrase ${f.name}`,

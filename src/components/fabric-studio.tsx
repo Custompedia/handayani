@@ -125,12 +125,11 @@ export function FabricStudio({
               intent={{
                 title: `Tanya ${collection.name} ${code}`,
                 line: `Saya tertarik dengan kain blackout ${collection.name} warna ${code}.`,
+                closing: "Mohon bantu info harga dan estimasinya.",
                 need: `Blackout ${collection.name} ${code}`,
               }}
-              className="group bg-gold text-ink hover:bg-ink hover:text-cream relative inline-flex flex-1 items-center justify-center gap-2 overflow-hidden rounded-full px-6 py-3.5 font-bold transition-colors"
+              className="bg-gold text-ink hover:bg-ink hover:text-cream inline-flex flex-1 items-center justify-center gap-2 rounded-full px-6 py-3.5 font-bold transition-colors"
             >
-              {/* kilau tipis yang lewat saat hover */}
-              <span className="pointer-events-none absolute inset-y-0 -left-1/2 w-1/3 -skew-x-12 bg-white/30 opacity-0 transition-all duration-700 group-hover:left-[120%] group-hover:opacity-100" />
               <WhatsAppIcon className="size-5" />
               Tanya {collection.name} {code}
             </WaButton>

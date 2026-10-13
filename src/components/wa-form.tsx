@@ -11,7 +11,7 @@ import {
 } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { Check, ChevronDown, MapPin, X } from "lucide-react";
-import { waLink } from "@/lib/data";
+import { contact, waLink } from "@/lib/data";
 import { conditions, type WaIntent } from "@/lib/wa-intents";
 import {
   loadWilayah,
@@ -41,28 +41,27 @@ const emptyForm: FormState = {
   need: "",
 };
 
-// Label & urutan sama persis dengan isian di form, supaya admin membaca
-// pesan WA dengan struktur yang sama seperti yang diisi pengunjung.
+// Gaya pesan: sapaan ke admin, tujuan, isian form sebagai poin (label &
+// urutan sama dengan form; isian kosong dilewati), lalu satu kalimat
+// permintaan. Tiap bagian dipisah baris kosong supaya mudah dibaca admin.
 function buildMessage(intent: WaIntent, form: FormState) {
-  const hint = conditions.find((c) => c.value === form.condition);
-  const condition =
-    hint && "hint" in hint
-      ? `${form.condition} (${hint.hint.toLowerCase()})`
-      : form.condition;
-  const location = [form.kecamatan.trim(), form.kota]
+  const location = [form.kecamatan.trim(), form.kota.trim()]
     .filter(Boolean)
     .join(", ");
+  const fields = [
+    ["Nama", form.name],
+    ["Status lokasi", form.condition],
+    ["Lokasi", location],
+    ["Kebutuhan", form.need],
+  ]
+    .filter(([, value]) => value.trim())
+    .map(([label, value]) => `• ${label}: ${value.trim()}`);
   return [
-    "Halo Handayani Gorden,",
+    `Halo Admin ${contact.brand}.`,
     intent.line,
-    "",
-    `*Nama:* ${form.name.trim()}`,
-    `*Kondisi rumah:* ${condition}`,
-    `*Lokasi:* ${location}`,
-    `*Kebutuhan:* ${form.need.trim() || "-"}`,
-    "",
-    "Foto atau ukuran jendela bisa saya kirim di chat ini. Terima kasih.",
-  ].join("\n");
+    fields.join("\n"),
+    intent.closing ?? "Mohon bantu rekomendasi kain dan estimasi biayanya.",
+  ].join("\n\n");
 }
 
 const WaFormContext = createContext<(intent: WaIntent) => void>(() => {});
@@ -192,7 +191,7 @@ export function WaFormProvider({ children }: { children: ReactNode }) {
                     className={fieldClass}
                   />
                 </Field>
-                <Field label="Kondisi rumah" as="div">
+                <Field label="Status lokasi" as="div">
                   <ConditionPicker
                     value={form.condition}
                     onChange={(condition) =>
@@ -260,7 +259,7 @@ function Field({
 }
 
 // Tiga pilihan dalam satu kontrol segmen yang sama tinggi; latar aktifnya
-// meluncur. Keterangan "pindahan" baru muncul saat pilihan itu aktif.
+// meluncur. Keterangan "Persiapan pindah" baru muncul saat pilihan itu aktif.
 function ConditionPicker({
   value,
   onChange,
