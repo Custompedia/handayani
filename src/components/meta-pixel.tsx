@@ -12,7 +12,7 @@ declare global {
 }
 
 // Meta Pixel untuk iklan: PageView + ViewContent saat landing page dibuka,
-// AddToCart setiap kali pengunjung klik tombol yang menuju WhatsApp.
+// Lead setiap kali pengunjung klik tombol yang menuju WhatsApp.
 export function MetaPixel() {
   useEffect(() => {
     // Satu listener untuk semua link wa.me, jadi tombol WA baru otomatis
@@ -25,7 +25,7 @@ export function MetaPixel() {
       if (!link) return;
       const label =
         link.getAttribute("aria-label") ?? link.textContent?.trim() ?? "";
-      window.fbq?.("track", "AddToCart", {
+      window.fbq?.("track", "Lead", {
         content_name: label || "WhatsApp",
         content_category: "WhatsApp CTA",
       });
