@@ -1,6 +1,12 @@
 import Image from "next/image";
 import { ArrowRight, Clock, MapPin, Phone } from "lucide-react";
-import { contact, instagramUrl, navLinks, waLink } from "@/lib/data";
+import {
+  contact,
+  contactAnchor,
+  instagramUrl,
+  navLinks,
+  waLink,
+} from "@/lib/data";
 import { InstagramIcon, WhatsAppIcon } from "./icons";
 import { Reveal } from "./reveal";
 
@@ -24,11 +30,7 @@ export function QuoteCta() {
             Kirim foto atau ukuran jendela, kami hitungkan penawarannya
           </h2>
           <a
-            href={waLink(
-              "Halo Handayani Gorden, saya mau minta penawaran harga. Berikut foto/ukuran jendela saya:",
-            )}
-            target="_blank"
-            rel="noopener noreferrer"
+            href={contactAnchor}
             className="bg-gold text-ink hover:bg-cream mt-9 inline-flex items-center gap-2 rounded-full px-7 py-4 font-bold transition-colors"
           >
             <WhatsAppIcon className="size-5" />
@@ -42,7 +44,30 @@ export function QuoteCta() {
 
 export function Footer() {
   return (
-    <footer className="bg-ink text-cream">
+    <footer id="kontak" className="bg-ink text-cream">
+      {/* Satu-satunya tombol yang langsung membuka WhatsApp; tombol WA lain
+          di halaman mengarah ke sini dulu (lihat contactAnchor). */}
+      <div className="border-cream/10 border-b">
+        <div className="container-page flex flex-col items-center gap-6 py-14 text-center md:flex-row md:justify-between md:text-left">
+          <div>
+            <p className="text-gold text-xs font-bold tracking-[0.25em] uppercase">
+              Konsultasi Gratis
+            </p>
+            <h2 className="mt-3 font-serif text-2xl leading-tight md:text-4xl">
+              Chat langsung dengan tim Handayani Gorden
+            </h2>
+          </div>
+          <a
+            href={waLink()}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex shrink-0 items-center gap-2 rounded-full bg-[#25D366] px-7 py-4 font-bold text-white transition-transform hover:scale-105"
+          >
+            <WhatsAppIcon className="size-5" />
+            Chat via WhatsApp
+          </a>
+        </div>
+      </div>
       <div className="container-page grid gap-12 py-16 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
         <div>
           <Image
@@ -165,9 +190,7 @@ function CopyrightYear() {
 export function WhatsAppFloat() {
   return (
     <a
-      href={waLink()}
-      target="_blank"
-      rel="noopener noreferrer"
+      href={contactAnchor}
       aria-label="Chat WhatsApp"
       className="shadow-ink/20 fixed right-5 bottom-5 z-30 grid size-14 place-items-center rounded-full bg-[#25D366] text-white shadow-lg transition-transform hover:scale-110 md:right-8 md:bottom-8"
     >

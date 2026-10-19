@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { ArrowRight, BadgeCheck, Ruler, SwatchBook, Timer } from "lucide-react";
-import { waLink } from "@/lib/data";
+import { contactAnchor } from "@/lib/data";
 import { WhatsAppIcon } from "./icons";
 import { Reveal } from "./reveal";
 
@@ -57,9 +57,7 @@ export function Hero() {
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <a
-                href={waLink()}
-                target="_blank"
-                rel="noopener noreferrer"
+                href={contactAnchor}
                 className="bg-gold text-ink hover:bg-cream inline-flex items-center gap-2 rounded-full px-6 py-3.5 font-bold transition-colors"
               >
                 <WhatsAppIcon className="size-5" />

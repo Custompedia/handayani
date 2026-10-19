@@ -14,6 +14,10 @@ export function waLink(
   return `https://wa.me/${contact.whatsapp}?text=${encodeURIComponent(text)}`;
 }
 
+// Untuk iklan: hanya tombol di footer yang langsung membuka WhatsApp.
+// Tombol WA lain di halaman mengarah ke footer dulu lewat anchor ini.
+export const contactAnchor = "#kontak";
+
 export const instagramUrl = `https://instagram.com/${contact.instagram}`;
 
 export const navLinks = [
