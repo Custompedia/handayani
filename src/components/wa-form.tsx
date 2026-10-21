@@ -153,7 +153,7 @@ export function WaFormProvider({ children }: { children: ReactNode }) {
               onSubmit={(e) => {
                 e.preventDefault();
                 // Link wa.me asli diklik supaya listener Meta Pixel
-                // (Lead) tetap mencatatnya seperti sebelumnya.
+                // (AddToCart) tetap mencatatnya seperti sebelumnya.
                 linkRef.current?.click();
                 close();
               }}
