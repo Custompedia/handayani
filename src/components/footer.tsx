@@ -134,22 +134,9 @@ export function Footer() {
         </div>
       </div>
       <div className="border-cream/10 border-t">
-        <div className="container-page text-cream/50 flex flex-col items-center gap-3 pt-6 pb-24 text-xs min-[1400px]:pb-6 md:flex-row md:justify-between">
+        <div className="container-page text-cream/50 pt-6 pb-24 text-center text-xs min-[1400px]:pb-6">
           <p>
             © <CopyrightYear /> {contact.brand}. Semua hak dilindungi.
-          </p>
-          <p className="inline-flex items-center gap-2 text-[13px]">
-            <span>Powered by</span>
-            <Image
-              src="/images/custompedia.webp"
-              alt="Custompedia"
-              width={22}
-              height={22}
-              className="size-[22px] rounded-md object-contain"
-            />
-            <strong className="text-cream text-sm font-bold tracking-tight">
-              Custompedia
-            </strong>
           </p>
         </div>
       </div>
