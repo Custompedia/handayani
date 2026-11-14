@@ -10,7 +10,6 @@ import {
   useSpring,
 } from "motion/react";
 import { useEffect, useRef, type ReactNode } from "react";
-import { cn } from "@/lib/utils";
 
 // Satu kurva untuk semua animasi: cepat di awal, mendarat pelan.
 export const ease = [0.22, 1, 0.36, 1] as const;
@@ -20,52 +19,47 @@ export function MotionProvider({ children }: { children: ReactNode }) {
   return <MotionConfig reducedMotion="user">{children}</MotionConfig>;
 }
 
-// Foto terbuka seperti gorden: dua panel bergeser ke kiri & kanan.
-// Hanya transform (dikerjakan GPU), jadi tetap mulus di HP.
+// Foto terbuka dari celah tipis di tengah ke kiri-kanan, seperti gorden
+// dibuka. Tanpa panel berwarna: yang terlihat di samping hanya latar
+// section itu sendiri, jadi di tengah animasi pun tetap rapi.
 export function CurtainReveal({
   children,
   className,
-  panelClassName = "bg-cocoa",
 }: {
   children: ReactNode;
   className?: string;
-  /** Warna panel gorden, sebaiknya senada dengan latar section. */
-  panelClassName?: string;
 }) {
   const reduce = useReducedMotion();
-  const viewport = { once: true, margin: "-120px" } as const;
-  const panel = (side: "left" | "right") => (
-    <motion.div
-      aria-hidden
-      className={cn(
-        "absolute inset-y-0 z-10 w-1/2",
-        side === "left" ? "left-0" : "right-0",
-        panelClassName,
-      )}
-      initial={{ x: "0%" }}
-      whileInView={{ x: side === "left" ? "-101%" : "101%" }}
-      viewport={viewport}
-      transition={{ duration: 1.3, ease: [0.76, 0, 0.24, 1] }}
-    />
-  );
+  // Deteksi "terlihat" di pembungkus luar yang tidak dipotong. Chrome ikut
+  // menghitung clip-path di IntersectionObserver, jadi kalau dipasang di
+  // elemen yang dipotong, animasinya tidak pernah mulai.
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, amount: 0.35 });
+  // Sudut ikut membulat selama animasi (sama dengan rounded-3xl).
+  const round = "round 1.5rem";
+  const closed = { clipPath: `inset(0% 42% 0% 42% ${round})`, opacity: 0 };
+  const open = { clipPath: `inset(0% 0% 0% 0% ${round})`, opacity: 1 };
 
   return (
-    <div className={className}>
+    <div ref={ref} className={className}>
       <motion.div
-        className="relative h-full w-full"
-        initial={reduce ? false : { scale: 1.15 }}
-        whileInView={{ scale: 1 }}
-        viewport={viewport}
-        transition={{ duration: 1.8, ease }}
+        className="absolute inset-0"
+        initial={reduce ? false : closed}
+        animate={inView || reduce ? open : closed}
+        transition={{
+          clipPath: { duration: 1.1, ease: [0.65, 0, 0.35, 1] },
+          opacity: { duration: 0.35 },
+        }}
       >
-        {children}
+        <motion.div
+          className="relative h-full w-full"
+          initial={reduce ? false : { scale: 1.12 }}
+          animate={{ scale: inView || reduce ? 1 : 1.12 }}
+          transition={{ duration: 1.6, ease }}
+        >
+          {children}
+        </motion.div>
       </motion.div>
-      {!reduce && (
-        <>
-          {panel("left")}
-          {panel("right")}
-        </>
-      )}
     </div>
   );
 }
