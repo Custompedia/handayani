@@ -14,39 +14,21 @@ export function waLink(
   return `https://wa.me/${contact.whatsapp}?text=${encodeURIComponent(text)}`;
 }
 
-// Untuk iklan: hanya tombol di footer yang langsung membuka WhatsApp.
-// Tombol WA lain di halaman mengarah ke footer dulu lewat anchor ini.
-export const contactAnchor = "#kontak";
+// Props untuk semua tombol WA: langsung membuka WhatsApp di tab baru.
+// Meta Pixel mencatat setiap klik link wa.me (lihat meta-pixel.tsx).
+export const waProps = {
+  href: waLink(),
+  target: "_blank",
+  rel: "noopener noreferrer",
+} as const;
 
 export const instagramUrl = `https://instagram.com/${contact.instagram}`;
 
 export const navLinks = [
-  { href: "#produk", label: "Produk" },
   { href: "#koleksi", label: "Koleksi Kain" },
   { href: "#portofolio", label: "Portofolio" },
   { href: "#cara-pesan", label: "Cara Pesan" },
   { href: "#testimoni", label: "Testimoni" },
-];
-
-export const products = [
-  {
-    name: "Gorden Blackout",
-    price: "Rp 170.000",
-    description:
-      "Tersedia blackout 80% dan 100%. Bisa dipasang dengan box gorden, poni, atau hidden ceiling.",
-    image: "/images/produk-blackout-hd.webp",
-    collections: "16 koleksi kain",
-    href: "#koleksi",
-  },
-  {
-    name: "Gorden Vitrase",
-    price: "Rp 100.000",
-    description:
-      "Kain tipis yang tetap meneruskan cahaya. Tersedia model ring (smokring) dan pengait kawat.",
-    image: "/images/produk-vitrase-hd.webp",
-    collections: "8 motif kain",
-    href: "#koleksi",
-  },
 ];
 
 export type FabricCollection = { name: string; slug: string; codes: string[] };

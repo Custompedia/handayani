@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Menu, X, Phone } from "lucide-react";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { contact, contactAnchor, navLinks } from "@/lib/data";
+import { contact, waProps, navLinks } from "@/lib/data";
 import { cn } from "@/lib/utils";
 import { WhatsAppIcon } from "./icons";
 
@@ -75,7 +75,7 @@ export function Header() {
 
           <div className="flex items-center gap-2">
             <a
-              href={contactAnchor}
+              {...waProps}
               className="bg-ink text-cream hover:bg-cocoa hidden items-center gap-2 rounded-full px-5 py-2.5 text-sm font-bold transition-colors sm:inline-flex"
             >
               <WhatsAppIcon className="size-4" />
@@ -143,7 +143,7 @@ export function Header() {
                 ))}
               </ul>
               <a
-                href={contactAnchor}
+                {...waProps}
                 onClick={() => setOpen(false)}
                 className="bg-ink text-cream mt-auto inline-flex items-center justify-center gap-2 rounded-full px-5 py-4 font-bold"
               >

@@ -4,7 +4,6 @@ import { Footer, QuoteCta, WhatsAppFloat } from "@/components/footer";
 import { Header } from "@/components/header";
 import { Hero } from "@/components/hero";
 import { Portfolio } from "@/components/portfolio";
-import { Products } from "@/components/products";
 import { Steps } from "@/components/steps";
 import { Testimonials } from "@/components/testimonials";
 
@@ -14,7 +13,6 @@ export default function Home() {
       <Header />
       <main className="flex-1">
         <Hero />
-        <Products />
         <Fabrics />
         <Portfolio />
         <About />

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { ArrowRight, BadgeCheck, Ruler, SwatchBook, Timer } from "lucide-react";
-import { contactAnchor } from "@/lib/data";
+import { waProps } from "@/lib/data";
 import { WhatsAppIcon } from "./icons";
 import { Reveal } from "./reveal";
 
@@ -29,7 +29,7 @@ const highlights = [
 
 export function Hero() {
   return (
-    <section className="relative">
+    <section className="bg-sand relative">
       <div className="relative h-[min(88svh,820px)] min-h-[560px] overflow-hidden">
         <Image
           src="/images/hero-hd.webp"
@@ -57,7 +57,7 @@ export function Hero() {
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <a
-                href={contactAnchor}
+                {...waProps}
                 className="bg-gold text-ink hover:bg-cream inline-flex items-center gap-2 rounded-full px-6 py-3.5 font-bold transition-colors"
               >
                 <WhatsAppIcon className="size-5" />

@@ -8,7 +8,7 @@ import { WhatsAppIcon } from "./icons";
 import { Reveal, SectionHeading } from "./reveal";
 import {
   blackoutCollections,
-  contactAnchor,
+  waProps,
   swatchSrc,
   vitraseFabrics,
   type FabricCollection,
@@ -125,7 +125,7 @@ export function Fabrics() {
                       {f.name}
                     </p>
                     <a
-                      href={contactAnchor}
+                      {...waProps}
                       aria-label={`Tanya kain vitrase ${f.name} via WhatsApp`}
                       className="bg-sand text-ink hover:bg-gold grid size-9 shrink-0 place-items-center rounded-full"
                     >
@@ -309,7 +309,7 @@ function FabricStudio({
 
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">
           <a
-            href={contactAnchor}
+            {...waProps}
             className="bg-gold text-ink hover:bg-ink hover:text-cream inline-flex flex-1 items-center justify-center gap-2 rounded-full px-6 py-3.5 font-bold transition-colors"
           >
             <WhatsAppIcon className="size-5" />
@@ -386,7 +386,7 @@ function CollectionCard({ collection }: { collection: FabricCollection }) {
           ))}
         </div>
         <a
-          href={contactAnchor}
+          {...waProps}
           className="text-gold-deep hover:text-ink mt-4 inline-flex items-center gap-1.5 self-start pt-1 text-sm font-bold"
         >
           <WhatsAppIcon className="size-4" />

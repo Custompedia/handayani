@@ -1,4 +1,4 @@
-import { contactAnchor, steps } from "@/lib/data";
+import { waProps, steps } from "@/lib/data";
 import { WhatsAppIcon } from "./icons";
 import { Reveal, SectionHeading } from "./reveal";
 
@@ -27,7 +27,7 @@ export function Steps() {
 
       <Reveal className="mt-10 text-center">
         <a
-          href={contactAnchor}
+          {...waProps}
           className="bg-ink text-cream hover:bg-cocoa inline-flex items-center gap-2 rounded-full px-7 py-4 font-bold transition-colors"
         >
           <WhatsAppIcon className="size-5" />
