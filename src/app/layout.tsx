@@ -15,8 +15,17 @@ const nunitoSans = Nunito_Sans({
   subsets: ["latin"],
 });
 
+// Cloudflare Pages selalu mengisi CF_PAGES=1 saat build. Semua build di Pages
+// adalah domain review (gordensemarang.custompedia.id, handayanigorden.custompedia.id,
+// preview *.pages.dev), jadi jangan sampai diindeks Google. Situs utama
+// handayanigorden.com dibangun oleh Worker (bukan Pages), jadi tetap terindeks.
+const isReviewBuild = process.env.CF_PAGES === "1";
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://gordensemarang.custompedia.id"),
+  robots: isReviewBuild
+    ? { index: false, follow: false }
+    : { index: true, follow: true },
   title: "Handayani Gorden Semarang - Gorden Blackout & Vitrase Custom",
   description:
     "6+ tahun bantu 3.000+ keluarga sejukkan rumahnya. Gorden blackout mulai Rp170.000/meter lari, vitrase mulai Rp100.000/meter lari. Gratis survei area Kota Semarang.",
