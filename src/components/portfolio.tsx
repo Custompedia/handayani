@@ -66,7 +66,7 @@ export function Portfolio() {
   const current = lightbox === null ? null : items[lightbox];
 
   return (
-    <section id="portofolio" className="container-page py-20 md:py-28">
+    <section id="portofolio" className="container-page pb-20 md:pb-28">
       <SectionHeading
         eyebrow="Portofolio"
         title="Hasil pemasangan kami"
@@ -120,7 +120,7 @@ export function Portfolio() {
                   type="button"
                   onClick={() => setLightbox(i)}
                   className={cn(
-                    "group bg-sand relative block aspect-[4/5] w-full overflow-hidden rounded-md text-left md:aspect-square",
+                    "group bg-sand relative block aspect-[4/5] w-full overflow-hidden rounded-2xl text-left md:aspect-square",
                     featured &&
                       "aspect-square sm:aspect-[4/3] md:aspect-auto md:h-full",
                   )}
