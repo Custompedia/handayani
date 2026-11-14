@@ -29,7 +29,7 @@ const highlights = [
 
 export function Hero() {
   return (
-    <section className="bg-sand relative">
+    <section className="relative">
       <div className="relative h-[min(88svh,820px)] min-h-[560px] overflow-hidden">
         <Image
           src="/images/hero-hd.webp"

@@ -53,7 +53,7 @@ export function Fabrics() {
   }, []);
 
   return (
-    <section ref={sectionRef} id="koleksi" className="bg-sand py-20 md:py-28">
+    <section ref={sectionRef} id="koleksi" className="py-20 md:py-28">
       <div className="container-page">
         <SectionHeading
           eyebrow="Koleksi Kain"
@@ -63,7 +63,7 @@ export function Fabrics() {
 
         <div
           role="tablist"
-          className="bg-cream mx-auto mt-10 flex w-fit rounded-full p-1.5 shadow-sm"
+          className="border-linen mx-auto mt-10 flex w-fit rounded-full border bg-white p-1.5 shadow-sm"
         >
           {tabs.map((t) => (
             <button
@@ -109,7 +109,7 @@ export function Fabrics() {
           <div className="mt-10 grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-5">
             {vitraseFabrics.map((f) => (
               <Reveal key={f.name} className="h-full">
-                <div className="bg-cream flex h-full flex-col overflow-hidden rounded-2xl">
+                <div className="border-linen flex h-full flex-col overflow-hidden rounded-2xl border bg-white">
                   <div className="relative aspect-square">
                     <Image
                       src={f.image}
@@ -183,7 +183,7 @@ function FabricStudio({
   }
 
   return (
-    <Reveal className="bg-cream mt-10 overflow-hidden rounded-3xl p-3 shadow-[0_20px_50px_-30px_rgba(42,34,29,0.35)] md:p-4">
+    <Reveal className="border-linen mt-10 overflow-hidden rounded-3xl border bg-white p-3 shadow-[0_20px_50px_-30px_rgba(42,34,29,0.35)] md:p-4">
       <div className="bg-linen relative aspect-[4/3] overflow-hidden rounded-2xl md:aspect-[16/9]">
         <AnimatePresence initial={false}>
           <motion.div
@@ -339,7 +339,7 @@ function CollectionCard({ collection }: { collection: FabricCollection }) {
   return (
     <div
       id={`kain-${collection.slug}`}
-      className="bg-cream flex flex-col overflow-hidden rounded-2xl"
+      className="border-linen flex flex-col overflow-hidden rounded-2xl border bg-white"
     >
       <div className="relative aspect-[4/3]">
         <Image
