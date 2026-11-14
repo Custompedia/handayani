@@ -5,6 +5,9 @@ import { MotionProvider } from "@/components/motion";
 import { contact } from "@/lib/data";
 import "./globals.css";
 
+// Domain utama situs ini (branch main). Dipakai untuk canonical, OG & JSON-LD.
+const siteUrl = "https://handayanigorden.com";
+
 const gilda = Gilda_Display({
   variable: "--font-gilda",
   weight: "400",
@@ -17,7 +20,7 @@ const nunitoSans = Nunito_Sans({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://gordensemarang.custompedia.id"),
+  metadataBase: new URL(siteUrl),
   title: "Handayani Gorden Semarang — Gorden Blackout & Vitrase Custom",
   description:
     "6+ tahun bantu 3.000+ keluarga sejukkan rumahnya. Gorden blackout mulai Rp170.000/meter lari, vitrase mulai Rp100.000/meter lari. Gratis survei area Kota Semarang.",
@@ -28,13 +31,18 @@ export const metadata: Metadata = {
     "gorden custom",
     "handayani gorden",
   ],
+  alternates: { canonical: "/" },
+  robots: { index: true, follow: true },
   openGraph: {
+    url: "/",
+    siteName: "Handayani Gorden Semarang",
     title: "Handayani Gorden Semarang",
     description:
       "Gorden blackout & vitrase custom. Gratis survei area Kota Semarang.",
     locale: "id_ID",
     type: "website",
   },
+  twitter: { card: "summary_large_image" },
 };
 
 export const viewport: Viewport = {
@@ -45,7 +53,12 @@ export const viewport: Viewport = {
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "HomeGoodsStore",
+  "@id": `${siteUrl}/#toko`,
   name: contact.brand,
+  url: siteUrl,
+  image: `${siteUrl}/opengraph-image.jpg`,
+  logo: `${siteUrl}/images/logo.png`,
+  hasMap: contact.mapsUrl,
   telephone: "+62 858-7588-8109",
   address: {
     "@type": "PostalAddress",

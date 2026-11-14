@@ -28,7 +28,8 @@ export function Reveal({
 }
 
 // Kata per kata naik dari balik garis, dipakai di judul hero & section.
-// Pembaca layar membaca teks utuh di sr-only, bukan potongan katanya.
+// Teksnya tetap utuh di HTML (dipisah spasi biasa), jadi Google dan
+// pembaca layar membaca judul yang sama persis.
 export function WordReveal({
   text,
   delay = 0,
@@ -50,9 +51,8 @@ export function WordReveal({
 
   return (
     <>
-      <span className="sr-only">{text}</span>
       {text.split(" ").map((word, i) => (
-        <span key={i} aria-hidden>
+        <span key={i}>
           {i > 0 && " "}
           {/* pb/-mb supaya ekor huruf (g, y) tidak terpotong. */}
           <span className="-mb-[0.15em] inline-block overflow-hidden pb-[0.15em] align-bottom">
