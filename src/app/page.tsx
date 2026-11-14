@@ -6,10 +6,11 @@ import { Hero } from "@/components/hero";
 import { Portfolio } from "@/components/portfolio";
 import { Steps } from "@/components/steps";
 import { Testimonials } from "@/components/testimonials";
+import { WaFormProvider } from "@/components/wa-form";
 
 export default function Home() {
   return (
-    <>
+    <WaFormProvider>
       <Header />
       <main className="flex-1">
         <Hero />
@@ -22,6 +23,6 @@ export default function Home() {
       </main>
       <Footer />
       <WhatsAppFloat />
-    </>
+    </WaFormProvider>
   );
 }

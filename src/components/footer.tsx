@@ -1,9 +1,11 @@
 import Image from "next/image";
 import { ArrowRight, Clock, MapPin, Phone } from "lucide-react";
-import { contact, waProps, instagramUrl, navLinks, waLink } from "@/lib/data";
+import { contact, instagramUrl, navLinks } from "@/lib/data";
 import { InstagramIcon, WhatsAppIcon } from "./icons";
 import { SettleOnView } from "./motion";
 import { Reveal } from "./reveal";
+import { intents } from "@/lib/wa-intents";
+import { WaButton } from "./wa-form";
 
 export function QuoteCta() {
   return (
@@ -26,13 +28,15 @@ export function QuoteCta() {
           <h2 className="mt-4 font-serif text-3xl leading-tight md:text-5xl">
             Kirim foto atau ukuran jendela, kami hitungkan penawarannya
           </h2>
-          <a
-            {...waProps}
-            className="bg-gold text-ink hover:bg-cream mt-9 inline-flex items-center gap-2 rounded-full px-7 py-4 font-bold transition-colors"
+          {/* Padding & ukuran teks mengikuti lebar layar supaya label tetap
+              satu baris di HP kecil. */}
+          <WaButton
+            intent={intents.estimasi}
+            className="bg-gold text-ink hover:bg-cream mt-9 inline-flex max-w-full items-center gap-2 rounded-full px-[clamp(1rem,5vw,1.75rem)] py-4 text-[clamp(0.8125rem,3.9vw,1rem)] font-bold whitespace-nowrap transition-colors"
           >
-            <WhatsAppIcon className="size-5" />
+            <WhatsAppIcon className="size-5 shrink-0" />
             Minta Penawaran via WhatsApp
-          </a>
+          </WaButton>
         </Reveal>
       </div>
     </section>
@@ -78,15 +82,13 @@ export function Footer() {
           </h3>
           <ul className="mt-5 space-y-4 text-sm">
             <li>
-              <a
-                href={waLink()}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-cream/80 hover:text-gold flex gap-3"
+              <WaButton
+                intent={intents.konsultasi}
+                className="text-cream/80 hover:text-gold flex gap-3 text-left"
               >
                 <Phone className="size-4 shrink-0 translate-y-0.5" />
                 {contact.phone} (WhatsApp)
-              </a>
+              </WaButton>
             </li>
             <li>
               <a
@@ -150,17 +152,12 @@ function CopyrightYear() {
 
 export function WhatsAppFloat() {
   return (
-    <a
-      {...waProps}
+    <WaButton
+      intent={intents.konsultasi}
       aria-label="Chat WhatsApp"
       className="shadow-ink/20 fixed right-5 bottom-5 z-30 grid size-14 animate-[wa-pop_0.6s_cubic-bezier(0.22,1,0.36,1)_1.4s_both] place-items-center rounded-full bg-[#25D366] text-white shadow-lg transition-transform hover:scale-110 motion-reduce:animate-none md:right-8 md:bottom-8"
     >
-      {/* Cincin lembut tiap beberapa detik, mengingatkan tanpa mengganggu. */}
-      <span
-        aria-hidden
-        className="absolute inset-0 animate-[wa-ring_3.2s_ease-out_2.2s_infinite] rounded-full bg-[#25D366] motion-reduce:hidden"
-      />
-      <WhatsAppIcon className="relative size-7" />
-    </a>
+      <WhatsAppIcon className="size-7" />
+    </WaButton>
   );
 }

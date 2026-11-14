@@ -5,10 +5,10 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { Check, Share2 } from "lucide-react";
 import { WhatsAppIcon } from "./icons";
+import { WaButton } from "./wa-form";
 import { Reveal, SectionHeading } from "./reveal";
 import {
   blackoutCollections,
-  waProps,
   swatchSrc,
   vitraseFabrics,
   type FabricCollection,
@@ -126,13 +126,20 @@ export function Fabrics() {
                     <p className="flex min-h-10 items-center font-serif text-base leading-tight md:text-lg">
                       {f.name}
                     </p>
-                    <a
-                      {...waProps}
+                    <WaButton
+                      intent={{
+                        title: `Tanya ${f.name}`,
+                        line: `Saya tertarik dengan kain vitrase ${f.name}.`,
+                        closing: "Mohon bantu info harga dan estimasinya.",
+                        need: /vitrase/i.test(f.name)
+                          ? f.name
+                          : `Vitrase ${f.name}`,
+                      }}
                       aria-label={`Tanya kain vitrase ${f.name} via WhatsApp`}
                       className="bg-sand text-ink hover:bg-gold grid size-9 shrink-0 place-items-center rounded-full"
                     >
                       <WhatsAppIcon className="size-4" />
-                    </a>
+                    </WaButton>
                   </div>
                 </div>
               </Reveal>
@@ -310,13 +317,18 @@ function FabricStudio({
         </div>
 
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-          <a
-            {...waProps}
+          <WaButton
+            intent={{
+              title: `Tanya ${collection.name} ${code}`,
+              line: `Saya tertarik dengan kain blackout ${collection.name} warna ${code}.`,
+              closing: "Mohon bantu info harga dan estimasinya.",
+              need: `Blackout ${collection.name} ${code}`,
+            }}
             className="bg-gold text-ink hover:bg-ink hover:text-cream inline-flex flex-1 items-center justify-center gap-2 rounded-full px-6 py-3.5 font-bold transition-colors"
           >
             <WhatsAppIcon className="size-5" />
             Tanya {collection.name} {code}
-          </a>
+          </WaButton>
           <button
             type="button"
             onClick={share}
@@ -399,13 +411,18 @@ function CollectionCard({ collection }: { collection: FabricCollection }) {
             </button>
           ))}
         </div>
-        <a
-          {...waProps}
+        <WaButton
+          intent={{
+            title: `Tanya ${collection.name} ${active}`,
+            line: `Saya tertarik dengan kain blackout ${collection.name} warna ${active}.`,
+            closing: "Mohon bantu info harga dan estimasinya.",
+            need: `Blackout ${collection.name} ${active}`,
+          }}
           className="text-gold-deep hover:text-ink mt-4 inline-flex items-center gap-1.5 self-start pt-1 text-sm font-bold"
         >
           <WhatsAppIcon className="size-4" />
           Tanya warna {active}
-        </a>
+        </WaButton>
       </div>
     </div>
   );

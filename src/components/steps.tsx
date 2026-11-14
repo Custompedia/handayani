@@ -1,5 +1,7 @@
-import { waProps, steps } from "@/lib/data";
+import { steps } from "@/lib/data";
 import { WhatsAppIcon } from "./icons";
+import { intents } from "@/lib/wa-intents";
+import { WaButton } from "./wa-form";
 import { Reveal, SectionHeading } from "./reveal";
 
 export function Steps() {
@@ -29,13 +31,13 @@ export function Steps() {
       </ol>
 
       <Reveal className="mt-10 text-center">
-        <a
-          {...waProps}
-          className="bg-ink text-cream hover:bg-cocoa inline-flex items-center gap-2 rounded-full px-7 py-4 font-bold transition-colors"
+        <WaButton
+          intent={intents.konsultasi}
+          className="bg-ink text-cream hover:bg-cocoa inline-flex items-center gap-2 rounded-full px-[clamp(1.25rem,6vw,1.75rem)] py-4 text-[clamp(0.875rem,4vw,1rem)] font-bold whitespace-nowrap transition-colors"
         >
-          <WhatsAppIcon className="size-5" />
+          <WhatsAppIcon className="size-5 shrink-0" />
           Mulai konsultasi sekarang
-        </a>
+        </WaButton>
       </Reveal>
     </section>
   );

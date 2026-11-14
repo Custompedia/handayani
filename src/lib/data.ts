@@ -14,14 +14,6 @@ export function waLink(
   return `https://wa.me/${contact.whatsapp}?text=${encodeURIComponent(text)}`;
 }
 
-// Props untuk semua tombol WA: langsung membuka WhatsApp di tab baru.
-// Meta Pixel mencatat setiap klik link wa.me (lihat meta-pixel.tsx).
-export const waProps = {
-  href: waLink(),
-  target: "_blank",
-  rel: "noopener noreferrer",
-} as const;
-
 export const instagramUrl = `https://instagram.com/${contact.instagram}`;
 
 export const navLinks = [

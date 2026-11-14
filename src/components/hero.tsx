@@ -4,8 +4,9 @@ import Image from "next/image";
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
 import { ArrowRight, BadgeCheck, Ruler, SwatchBook, Timer } from "lucide-react";
-import { waProps } from "@/lib/data";
 import { WhatsAppIcon } from "./icons";
+import { intents } from "@/lib/wa-intents";
+import { WaButton } from "./wa-form";
 import { ease } from "./motion";
 import { WordReveal } from "./reveal";
 
@@ -109,13 +110,13 @@ export function Hero() {
               mulai <strong className="text-cream">Rp100.000/mL</strong>.
             </motion.p>
             <motion.div className="mt-8 flex flex-wrap gap-3" {...enter(1)}>
-              <a
-                {...waProps}
-                className="bg-gold text-ink hover:bg-cream inline-flex items-center gap-2 rounded-full px-6 py-3.5 font-bold transition-colors"
+              <WaButton
+                intent={intents.konsultasi}
+                className="bg-gold text-ink hover:bg-cream inline-flex items-center gap-2 rounded-full px-6 py-3.5 font-bold whitespace-nowrap transition-colors"
               >
                 <WhatsAppIcon className="size-5" />
                 Konsultasi Gratis
-              </a>
+              </WaButton>
               <a
                 href="#koleksi"
                 className="group border-cream/60 text-cream hover:bg-cream hover:text-ink inline-flex items-center gap-2 rounded-full border px-6 py-3.5 font-bold transition-colors"

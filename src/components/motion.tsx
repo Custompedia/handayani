@@ -6,8 +6,6 @@ import {
   MotionConfig,
   useInView,
   useReducedMotion,
-  useScroll,
-  useSpring,
 } from "motion/react";
 import { useEffect, useRef, type ReactNode } from "react";
 
@@ -120,22 +118,5 @@ export function CountUp({ value }: { value: string }) {
     <span ref={ref} className="tabular-nums">
       {value}
     </span>
-  );
-}
-
-// Garis emas tipis di bawah header yang mengikuti posisi scroll.
-export function ScrollProgress() {
-  const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, {
-    stiffness: 140,
-    damping: 30,
-    restDelta: 0.001,
-  });
-  return (
-    <motion.div
-      aria-hidden
-      className="bg-gold absolute inset-x-0 -bottom-px h-0.5 origin-left"
-      style={{ scaleX }}
-    />
   );
 }
