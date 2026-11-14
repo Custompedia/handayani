@@ -29,33 +29,29 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Cloudflare Pages
+## Deploy on Cloudflare
 
-The site is a static export (`output: "export"` in `next.config.ts`): `next build` writes plain HTML/CSS/JS to `out/`, which the Cloudflare Pages project `handayani` serves at https://gordensemarang.custompedia.id.
-
-Pages build settings: build command `npx next build`, output directory `out`. Every push to `main` deploys automatically.
+The site is a static export (`output: "export"` in `next.config.ts`): `next build` writes plain HTML/CSS/JS to `out/`. Each branch is served by its own Cloudflare project, so the two never mix.
 
 ### Branches & domains
 
-| Branch            | Domain                                 | Purpose                                                   |
-| ----------------- | -------------------------------------- | --------------------------------------------------------- |
-| `main`            | https://gordensemarang.custompedia.id  | Production: the live landing page used for ads.           |
-| `handayanigorden` | https://handayanigorden.custompedia.id | Review: client previews changes here before they go live. |
+| Branch            | Cloudflare project                                             | Domains                                                                       | Google             |
+| ----------------- | -------------------------------------------------------------- | ----------------------------------------------------------------------------- | ------------------ |
+| `main`            | Worker `handayani` (Workers Builds)                            | https://handayanigorden.com, https://www.handayanigorden.com                  | indexed            |
+| `handayanigorden` | Pages `handayani-gorden` (subdomain `handayani-bz2.pages.dev`) | https://gordensemarang.custompedia.id, https://handayanigorden.custompedia.id | `noindex` (review) |
 
-Workflow: commit and push to `handayanigorden`, check the result on `handayanigorden.custompedia.id`, and once the client approves, merge `handayanigorden` into `main` to publish it on `gordensemarang.custompedia.id`. Never push unreviewed work straight to `main`.
+The two branches now carry different designs, so do not merge one into the other wholesale; port the specific changes the client approves.
 
-`handayanigorden` replaces the old `staging` branch (renamed so the branch matches its domain).
+`src/app/layout.tsx` emits `noindex, nofollow` whenever the build runs on Cloudflare Pages (Pages sets `CF_PAGES=1`), and `index, follow` everywhere else. This keeps the review domains out of Google even if the branches are merged.
 
-To serve the branch on its domain (Cloudflare dashboard, `custompedia.id` DNS is on Cloudflare):
+### Worker `handayani` (`main`)
 
-1. Workers & Pages > project `handayani` > Settings > Builds > Branch control: make sure `handayanigorden` is included in the preview branches, and that it has a successful deployment.
-2. Custom domains > Set up a custom domain > `handayanigorden.custompedia.id` > Activate domain.
-3. DNS for `custompedia.id`: edit the `handayanigorden` CNAME so it targets the branch alias `handayanigorden.<project>.pages.dev` instead of `<project>.pages.dev`. Keep it **Proxied**; an unproxied record falls back to the `main` deployment.
+Workers Builds settings (Workers & Pages > `handayani`, the Worker, not the Pages project): production branch `main`, build command `pnpm run build`, deploy command `npx wrangler deploy`, **Builds for Preview branches off**. The deploy settings live in `wrangler.jsonc`, which uploads `out/` as static assets with no Worker script. Without that file `wrangler deploy` tries to set the app up for OpenNext and the build fails.
 
-### Worker `handayani` (main only)
+### Pages `handayani-gorden` (`handayanigorden`)
 
-A separate Cloudflare Worker, also named `handayani` (Workers & Pages > `handayani`, the Worker, not the Pages project), builds only `main` and serves it at https://handayani.hello-aaf.workers.dev. Its settings live in `wrangler.jsonc`: it uploads `out/` as static assets, with no Worker script.
+Pages build settings: production branch `handayanigorden`, build command `npx next build`, output directory `out`.
 
-Workers Builds settings: production branch `main`, build command `pnpm run build`, deploy command `npx wrangler deploy`, non-production branch builds off. Without `wrangler.jsonc`, `wrangler deploy` tries to set the app up for OpenNext and the build fails.
+Because `handayanigorden` is the production branch, every custom domain must point at the project itself. In the `custompedia.id` DNS, each CNAME (`gordensemarang`, `handayanigorden`) targets `handayani-bz2.pages.dev` and stays **Proxied**. Do not target a branch alias such as `handayanigorden.handayani-bz2.pages.dev`: production deploys do not update branch aliases, so the domain would freeze on an old build.
 
-Because there is no server, features that need one (image optimization, Cache Components/PPR, ISR, Server Actions, route handlers that read the request) are not available. Images are served as-is, so keep them pre-sized WebP. `public/_headers` sets the cache headers Pages applies.
+Because there is no server, features that need one (image optimization, Cache Components/PPR, ISR, Server Actions, route handlers that read the request) are not available. Images are served as-is, so keep them pre-sized WebP. `public/_headers` sets the cache headers that both Pages and the Worker apply.
