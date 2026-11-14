@@ -1,0 +1,13 @@
+// Cloudflare Worker `handayani`: serves the static export in `out/` for the
+// `main` branch. Workers Builds runs `pnpm run build`, then `npx wrangler deploy`
+// reads this file. Without it, wrangler auto-configures the app for OpenNext,
+// which fails on a static export.
+{
+  "$schema": "https://unpkg.com/wrangler@4.162.0/config-schema.json",
+  "name": "handayani",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./out",
+    "not_found_handling": "404-page",
+  },
+}
