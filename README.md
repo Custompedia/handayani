@@ -52,4 +52,10 @@ To serve the branch on its domain (Cloudflare dashboard, `custompedia.id` DNS is
 2. Custom domains > Set up a custom domain > `handayanigorden.custompedia.id` > Activate domain.
 3. DNS for `custompedia.id`: edit the `handayanigorden` CNAME so it targets the branch alias `handayanigorden.<project>.pages.dev` instead of `<project>.pages.dev`. Keep it **Proxied**; an unproxied record falls back to the `main` deployment.
 
+### Worker `handayani` (main only)
+
+A separate Cloudflare Worker, also named `handayani` (Workers & Pages > `handayani`, the Worker, not the Pages project), builds only `main` and serves it at https://handayani.hello-aaf.workers.dev. Its settings live in `wrangler.jsonc`: it uploads `out/` as static assets, with no Worker script.
+
+Workers Builds settings: production branch `main`, build command `pnpm run build`, deploy command `npx wrangler deploy`, non-production branch builds off. Without `wrangler.jsonc`, `wrangler deploy` tries to set the app up for OpenNext and the build fails.
+
 Because there is no server, features that need one (image optimization, Cache Components/PPR, ISR, Server Actions, route handlers that read the request) are not available. Images are served as-is, so keep them pre-sized WebP. `public/_headers` sets the cache headers Pages applies.
