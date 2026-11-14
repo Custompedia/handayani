@@ -8,6 +8,12 @@ import "./globals.css";
 // Domain utama situs ini (branch main). Dipakai untuk canonical, OG & JSON-LD.
 const siteUrl = "https://handayanigorden.com";
 
+// Cloudflare Pages selalu mengisi CF_PAGES=1 saat build. Semua build di Pages
+// adalah domain review (gordensemarang.custompedia.id, handayanigorden.custompedia.id,
+// preview *.pages.dev), jadi jangan sampai diindeks Google. Situs utama
+// dibangun oleh Worker (bukan Pages), jadi tetap terindeks.
+const isReviewBuild = process.env.CF_PAGES === "1";
+
 const gilda = Gilda_Display({
   variable: "--font-gilda",
   weight: "400",
@@ -32,7 +38,9 @@ export const metadata: Metadata = {
     "handayani gorden",
   ],
   alternates: { canonical: "/" },
-  robots: { index: true, follow: true },
+  robots: isReviewBuild
+    ? { index: false, follow: false }
+    : { index: true, follow: true },
   openGraph: {
     url: "/",
     siteName: "Handayani Gorden Semarang",
