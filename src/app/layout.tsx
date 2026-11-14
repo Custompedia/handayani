@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Gilda_Display, Nunito_Sans } from "next/font/google";
 import { MetaPixel } from "@/components/meta-pixel";
+import { MotionProvider } from "@/components/motion";
 import { contact } from "@/lib/data";
 import "./globals.css";
 
@@ -69,7 +70,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        {children}
+        <MotionProvider>{children}</MotionProvider>
         <MetaPixel />
       </body>
     </html>

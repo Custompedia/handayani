@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { ArrowUpRight, ChevronLeft, ChevronRight, Plus, X } from "lucide-react";
+import { ease } from "./motion";
 import { SectionHeading } from "./reveal";
 import {
   portfolio,
@@ -107,8 +108,18 @@ export function Portfolio() {
               <motion.li
                 key={item.src}
                 layout
-                initial={{ opacity: 0, scale: 0.96 }}
-                animate={{ opacity: 1, scale: 1 }}
+                initial={{ opacity: 0, y: 28 }}
+                // Muncul saat terlihat, berurutan dalam satu blok.
+                whileInView={{
+                  opacity: 1,
+                  y: 0,
+                  transition: {
+                    duration: 0.8,
+                    delay: (i % PAGE_SIZE) * 0.06,
+                    ease,
+                  },
+                }}
+                viewport={{ once: true, margin: "-60px" }}
                 exit={{ opacity: 0, scale: 0.96 }}
                 transition={{ duration: 0.3 }}
                 className={cn(

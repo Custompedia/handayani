@@ -7,6 +7,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { contact, waProps, navLinks } from "@/lib/data";
 import { cn } from "@/lib/utils";
 import { WhatsAppIcon } from "./icons";
+import { ScrollProgress } from "./motion";
 
 export function Header() {
   const [open, setOpen] = useState(false);
@@ -48,6 +49,7 @@ export function Header() {
             : "border-transparent",
         )}
       >
+        <ScrollProgress />
         <nav className="container-page flex h-18 items-center justify-between gap-6 md:h-20">
           <a href="#" aria-label="Handayani Gorden Semarang — beranda">
             <Image

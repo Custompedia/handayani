@@ -2,18 +2,21 @@ import Image from "next/image";
 import { ArrowRight, Clock, MapPin, Phone } from "lucide-react";
 import { contact, waProps, instagramUrl, navLinks, waLink } from "@/lib/data";
 import { InstagramIcon, WhatsAppIcon } from "./icons";
+import { SettleOnView } from "./motion";
 import { Reveal } from "./reveal";
 
 export function QuoteCta() {
   return (
     <section className="relative isolate overflow-hidden">
-      <Image
-        src="/images/cta.webp"
-        alt=""
-        fill
-        sizes="100vw"
-        className="-z-10 object-cover"
-      />
+      <SettleOnView className="absolute inset-0 -z-10">
+        <Image
+          src="/images/cta.webp"
+          alt=""
+          fill
+          sizes="100vw"
+          className="object-cover"
+        />
+      </SettleOnView>
       <div className="bg-ink/65 absolute inset-0 -z-10" />
       <div className="container-page text-cream py-24 text-center md:py-32">
         <Reveal className="mx-auto max-w-2xl">
@@ -163,9 +166,14 @@ export function WhatsAppFloat() {
     <a
       {...waProps}
       aria-label="Chat WhatsApp"
-      className="shadow-ink/20 fixed right-5 bottom-5 z-30 grid size-14 place-items-center rounded-full bg-[#25D366] text-white shadow-lg transition-transform hover:scale-110 md:right-8 md:bottom-8"
+      className="shadow-ink/20 fixed right-5 bottom-5 z-30 grid size-14 animate-[wa-pop_0.6s_cubic-bezier(0.22,1,0.36,1)_1.4s_both] place-items-center rounded-full bg-[#25D366] text-white shadow-lg transition-transform hover:scale-110 motion-reduce:animate-none md:right-8 md:bottom-8"
     >
-      <WhatsAppIcon className="size-7" />
+      {/* Cincin lembut tiap beberapa detik, mengingatkan tanpa mengganggu. */}
+      <span
+        aria-hidden
+        className="absolute inset-0 animate-[wa-ring_3.2s_ease-out_2.2s_infinite] rounded-full bg-[#25D366] motion-reduce:hidden"
+      />
+      <WhatsAppIcon className="relative size-7" />
     </a>
   );
 }

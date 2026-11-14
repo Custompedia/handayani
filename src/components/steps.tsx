@@ -13,9 +13,12 @@ export function Steps() {
 
       <ol className="bg-linen mt-12 grid gap-px overflow-hidden rounded-3xl md:mt-16 md:grid-cols-2 lg:grid-cols-3">
         {steps.map((s, i) => (
-          <li key={s.title} className="bg-white">
+          <li
+            key={s.title}
+            className="group hover:bg-cream bg-white transition-colors duration-500"
+          >
             <Reveal delay={(i % 3) * 0.08} className="h-full p-7 md:p-9">
-              <span className="text-gold font-serif text-5xl">
+              <span className="text-gold inline-block font-serif text-5xl transition-transform duration-500 group-hover:-translate-y-1">
                 {String(i + 1).padStart(2, "0")}
               </span>
               <h3 className="mt-4 font-serif text-2xl">{s.title}</h3>

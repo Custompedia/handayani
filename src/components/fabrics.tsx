@@ -100,23 +100,25 @@ export function Fabrics() {
             </div>
             {/* Desktop: semua koleksi tampil sebagai grid kartu. */}
             <div className="mt-10 hidden gap-5 lg:grid lg:grid-cols-3 xl:grid-cols-4">
-              {blackoutCollections.map((c) => (
-                <CollectionCard key={c.slug} collection={c} />
+              {blackoutCollections.map((c, i) => (
+                <Reveal key={c.slug} delay={(i % 4) * 0.07} className="h-full">
+                  <CollectionCard collection={c} />
+                </Reveal>
               ))}
             </div>
           </>
         ) : (
           <div className="mt-10 grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-5">
-            {vitraseFabrics.map((f) => (
-              <Reveal key={f.name} className="h-full">
-                <div className="border-linen flex h-full flex-col overflow-hidden rounded-2xl border bg-white">
-                  <div className="relative aspect-square">
+            {vitraseFabrics.map((f, i) => (
+              <Reveal key={f.name} delay={(i % 4) * 0.07} className="h-full">
+                <div className="group border-linen flex h-full flex-col overflow-hidden rounded-2xl border bg-white transition duration-500 hover:-translate-y-1 hover:shadow-[0_24px_48px_-28px_rgba(42,34,29,0.45)]">
+                  <div className="relative aspect-square overflow-hidden">
                     <Image
                       src={f.image}
                       alt={`Kain vitrase ${f.name}`}
                       fill
                       sizes="(min-width: 768px) 25vw, 50vw"
-                      className="object-cover"
+                      className="object-cover transition-transform duration-700 group-hover:scale-105"
                     />
                   </div>
                   <div className="flex flex-1 items-center justify-between gap-2 p-3 md:p-4">
@@ -279,7 +281,7 @@ function FabricStudio({
             {collection.codes.length} warna tersedia
           </p>
         </div>
-        <div className="mt-3 flex flex-wrap gap-2">
+        <div className="mt-3 flex flex-wrap gap-3.5">
           {collection.codes.map((c) => (
             <button
               key={c}
@@ -290,7 +292,7 @@ function FabricStudio({
               aria-label={`${collection.name} warna ${c}`}
               aria-pressed={c === code}
               className={cn(
-                "ring-offset-cream relative size-11 overflow-hidden rounded-full ring-offset-2 transition",
+                "relative size-11 overflow-hidden rounded-full ring-offset-2 ring-offset-white transition",
                 c === code
                   ? "ring-ink ring-2"
                   : "ring-linen hover:ring-muted ring-1",
@@ -339,16 +341,28 @@ function CollectionCard({ collection }: { collection: FabricCollection }) {
   return (
     <div
       id={`kain-${collection.slug}`}
-      className="border-linen flex flex-col overflow-hidden rounded-2xl border bg-white"
+      className="group border-linen flex h-full flex-col overflow-hidden rounded-2xl border bg-white transition duration-500 hover:-translate-y-1 hover:shadow-[0_24px_48px_-28px_rgba(42,34,29,0.45)]"
     >
-      <div className="relative aspect-[4/3]">
-        <Image
-          src={swatchSrc(collection.slug, active)}
-          alt={`Kain blackout ${collection.name} warna ${active}`}
-          fill
-          sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-          className="object-cover"
-        />
+      <div className="relative aspect-[4/3] overflow-hidden">
+        {/* Ganti warna = foto lama memudar ke foto baru. */}
+        <AnimatePresence initial={false}>
+          <motion.div
+            key={active}
+            className="absolute inset-0 transition-transform duration-700 group-hover:scale-105"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.45 }}
+          >
+            <Image
+              src={swatchSrc(collection.slug, active)}
+              alt={`Kain blackout ${collection.name} warna ${active}`}
+              fill
+              sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+              className="object-cover"
+            />
+          </motion.div>
+        </AnimatePresence>
         <span className="bg-cream/90 absolute top-3 left-3 rounded-full px-3 py-1 text-xs font-bold backdrop-blur">
           {active}
         </span>
@@ -360,7 +374,7 @@ function CollectionCard({ collection }: { collection: FabricCollection }) {
             {collection.codes.length} warna
           </span>
         </div>
-        <div className="mt-3 flex flex-wrap gap-1.5">
+        <div className="mt-4 flex flex-wrap gap-3">
           {collection.codes.map((code) => (
             <button
               key={code}
@@ -369,7 +383,7 @@ function CollectionCard({ collection }: { collection: FabricCollection }) {
               aria-label={`${collection.name} warna ${code}`}
               aria-pressed={active === code}
               className={cn(
-                "ring-offset-cream relative size-7 overflow-hidden rounded-full ring-offset-2 transition",
+                "relative size-7 overflow-hidden rounded-full ring-offset-2 ring-offset-white transition",
                 active === code
                   ? "ring-ink ring-2"
                   : "ring-linen hover:ring-muted ring-1",

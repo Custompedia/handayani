@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { CountUp, CurtainReveal } from "./motion";
 import { Reveal } from "./reveal";
 
 const stats = [
@@ -11,7 +12,7 @@ export function About() {
   return (
     <section className="bg-ink text-cream">
       <div className="container-page grid items-center gap-12 py-20 md:py-28 lg:grid-cols-2 lg:gap-20">
-        <Reveal className="relative aspect-[5/4] overflow-hidden rounded-3xl lg:aspect-[4/5]">
+        <CurtainReveal className="relative aspect-[5/4] overflow-hidden rounded-3xl lg:aspect-[4/5]">
           <Image
             src="/images/tentang-hd.webp"
             alt="Ibu dan anak-anak membaca buku di kamar dengan gorden blackout"
@@ -19,7 +20,7 @@ export function About() {
             sizes="(min-width: 1024px) 50vw, 100vw"
             className="object-cover object-[60%_50%]"
           />
-        </Reveal>
+        </CurtainReveal>
 
         <Reveal delay={0.1}>
           <p className="text-gold text-xs font-bold tracking-[0.25em] uppercase">
@@ -37,7 +38,7 @@ export function About() {
               <div key={s.label}>
                 <dt className="sr-only">{s.label}</dt>
                 <dd className="text-gold font-serif text-3xl md:text-5xl">
-                  {s.value}
+                  <CountUp value={s.value} />
                 </dd>
                 <dd className="text-cream/70 mt-1 text-xs md:text-sm">
                   {s.label}
