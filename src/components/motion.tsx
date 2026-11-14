@@ -1,13 +1,12 @@
 "use client";
 
 import {
-  animate,
   motion,
   MotionConfig,
   useInView,
   useReducedMotion,
 } from "motion/react";
-import { useEffect, useRef, type ReactNode } from "react";
+import { useRef, type ReactNode } from "react";
 
 // Satu kurva untuk semua animasi: cepat di awal, mendarat pelan.
 export const ease = [0.22, 1, 0.36, 1] as const;
@@ -80,43 +79,5 @@ export function SettleOnView({
     >
       {children}
     </motion.div>
-  );
-}
-
-// Angka seperti "3.000+" menghitung naik saat terlihat. HTML awal tetap
-// berisi angka akhir, jadi tanpa JavaScript angkanya tetap benar.
-export function CountUp({ value }: { value: string }) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
-  const reduce = useReducedMotion();
-  const match = value.match(/^([\d.]+)(.*)$/);
-  const target = match ? Number(match[1].replace(/\./g, "")) : NaN;
-  const suffix = match?.[2] ?? "";
-  const format = (n: number) =>
-    `${Math.round(n).toLocaleString("id-ID")}${suffix}`;
-
-  useEffect(() => {
-    if (reduce || Number.isNaN(target) || !ref.current) return;
-    // Section ini jauh di bawah, jadi reset ke 0 tidak terlihat.
-    if (!inView) {
-      ref.current.textContent = format(0);
-      return;
-    }
-    const controls = animate(0, target, {
-      duration: 1.8,
-      ease,
-      onUpdate: (n) => {
-        if (ref.current) ref.current.textContent = format(n);
-      },
-    });
-    return () => controls.stop();
-    // format hanya bergantung pada suffix.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [inView, reduce, target, suffix]);
-
-  return (
-    <span ref={ref} className="tabular-nums">
-      {value}
-    </span>
   );
 }

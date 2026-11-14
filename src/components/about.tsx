@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { CountUp, CurtainReveal } from "./motion";
+import { CurtainReveal } from "./motion";
 import { Reveal } from "./reveal";
 
 const stats = [
@@ -38,7 +38,7 @@ export function About() {
               <div key={s.label}>
                 <dt className="sr-only">{s.label}</dt>
                 <dd className="text-gold font-serif text-3xl md:text-5xl">
-                  <CountUp value={s.value} />
+                  {s.value}
                 </dd>
                 <dd className="text-cream/70 mt-1 text-xs md:text-sm">
                   {s.label}
